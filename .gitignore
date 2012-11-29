@@ -1,2 +1,5 @@
 *.o
 *.d
+*.vim
+*.out
+soda
