@@ -2,38 +2,49 @@
 #define __PRINTER_H__
 
 #include <uC++.h>
-#include <vector>
+#include <iostream>
 
+using namespace std;
+
+//---------------------------------------------------------------------------------------
+// Printer
+//
+// Printer related functions and functionality
+//---------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------
+// Printer Monitor Definition
+//
+// Class definition for Printer
+//---------------------------------------------------------------------------------------
 _Monitor Printer {
-   public:
-      enum Kind { Parent, WATCardOffice, NameServer, Truck, BottlingPlant, Student, Vending, Courier };
-      Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers );
-      void print( Kind kind, char state );
-      void print( Kind kind, char state, int value1 );
-      void print( Kind kind, char state, int value1, int value2 );
-      void print( Kind kind, unsigned int lid, char state );
-      void print( Kind kind, unsigned int lid, char state, int value1 );
-      void print( Kind kind, unsigned int lid, char state, int value1, int value2 );
-      ~Printer();
+   unsigned int nStudents;
+   unsigned int nVendingMachines;
+   unsigned int nCouriers;
+   unsigned int nMembers;
 
-   private:
-      // information about voter buffered by the printer
-      struct buf_state {
-         Voter::States  state;
-         bool           vote;
-      };
+   struct OutputState{
+      OutputState() : state(''), val1(-1), val2(-1){};
 
-      unsigned int   numVoters;
-      bool           needFlush;
-      std::vector<buf_state>  buffer;
-      std::vector<bool>       dirty;
+      char state;
+      int val1;
+      int val2;
+   };
 
-      void flush_buffer();
-      void flush_finish( unsigned int id );
+   OutputState** userStates;
+   void flush();
+  public:
+   enum Kind { Parent, WATCardOffice, NameServer, Truck, BottlingPlant, Student, Vending, Courier };
 
-      // helper to reduce code duplication
-      //_Mutex void print( unsigned int id, Voter::States state, unsigned int numBlocked, bool vote);
+   Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers );
+   ~Printer();
 
-};
+   void print( Kind kind, char state );
+   void print( Kind kind, char state, int value1 );
+   void print( Kind kind, char state, int value1, int value2 );
+   void print( Kind kind, unsigned int lid, char state );
+   void print( Kind kind, unsigned int lid, char state, int value1 );
+   void print( Kind kind, unsigned int lid, char state, int value1, int value2 );
+}; // Printer
 
-#endif
+#endif //__PRINTER_H__

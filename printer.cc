@@ -5,113 +5,294 @@
 
 using namespace std;
 
-/*
- * Printer header
- */
-Printer::Printer( unsigned int voters )
-   : numVoters(voters), needFlush(false), dirty(voters, false)
-{
-   buffer.reserve(numVoters);
-   for (unsigned int i=0; i<voters; i++) {
-      cout << "Voter" << i << "\t";
+//---------------------------------------------------------------------------------------
+// Printer::Printer()
+//
+// Constructor for the printer
+//---------------------------------------------------------------------------------------
+Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers ){
+   this->nStudents = numStudents;
+   this->nVendingMachines = numVendingMachines;
+   this->nCouriers = numCouriers;
+
+   //Total number of members is the number of students + number of machines
+   // + number of couriers + the Parent, WATOffice, Nameserver, Truck, and Plant
+   this->nMembers = this->nStudents + this->nVendingMachines + this->nCouriers + 5;
+
+   //Create the states array
+   this->userStates = new OutputState*[this->nMembers];
+
+   int index = 0;
+
+   this->userStates[index] = new OutputState;
+   cout << "Parent";
+   cout << "\t";
+   index++;
+
+   this->userStates[index] = new OutputState;
+   cout << "WATOff";
+   cout << "\t";
+   index++;
+
+   this->userStates[index] = new OutputState;
+   cout << "Names";
+   cout << "\t";
+   index++;
+
+   this->userStates[index] = new OutputState;
+   cout << "Truck";
+   cout << "\t";
+   index++;
+
+   this->userStates[index] = new OutputState;
+   cout << "Plant";
+   cout << "\t";
+   index++;
+
+   for ( unsigned int i = 0; i < this->nStudents; i++ ){
+      this->userStates[index] = new OutputState;
+      cout << "Stud" << i;
+      cout << "\t";
+      index++;
+   }
+
+   for ( unsigned int i = 0; i < this->nVendingMachines; i++ ){
+      this->userStates[index] = new OutputState;
+      cout << "Mach" << i;
+      cout << "\t";
+      index++;
+   }
+
+   for ( unsigned int i = 0; i < this->nCouriers; i++ ){
+      this->userStates[index] = new OutputState;
+      cout << "Cour" << i;
+      cout << "\t";
+      index++;
+   }
+
+   cout << endl;
+
+   for ( unsigned int i = 0; i < this->nMembers; i++ ){
+      cout << "*******";
+      cout << "\t";
    }
    cout << endl;
-   for (unsigned int i=0; i<voters; i++) {
-      cout << "=======" << "\t";
-   }
-   cout << endl;
+
 }
 
-/*
- * Flush buffer if not terminated properly.
- * Printer footer
- */
-Printer::~Printer()
-{
-   if (needFlush) {
-      flush_buffer();
+//---------------------------------------------------------------------------------------
+// Printer::~Printer()
+//
+// Destructor for the printer
+//---------------------------------------------------------------------------------------
+Printer::~Printer(){
+   cout << "***********************" << endl;
+
+   for ( unsigned int i = 0; i < this->nMembers; i++ ){
+       delete userStates[i];
    }
-   cout << "=================" << endl;
-   cout << "All tours started" << endl;
+
+   delete userStates;
 }
 
-void Printer::flush_buffer()
-{
-   if (!needFlush) return; // do not flush at all if nothing new was buffered
-   for (unsigned int i=0; i<numVoters; i++) {
-      if (!dirty[i]) {
-         cout << '\t';     // empty column if nothing new was buffered
-         continue;
+//---------------------------------------------------------------------------------------
+// Printer::flush()
+//
+// Call to flush the buffer of all print info
+//---------------------------------------------------------------------------------------
+void Printer::flush(){
+
+   for ( unsigned int i = 0; i < this->nMembers; i++ ){
+      
+      cout << ( this->userStates[i]->state == "" ? "" : this->userStates[i]->state );
+      if ( this->userStates[i]->val1 != -1 ){
+         cout << this->userStates[i]->val1;
+         if ( this->userStates[i]->val2 != -1 ){
+            cout << "," << this->userStates[i]->val2;
+         }
       }
-      switch(buffer[i].state) {
-         case Voter::Start:
-         case Voter::Complete:
-            cout << (char)buffer[i].state << "\t";
-            break;
-         case Voter::Vote:
-         case Voter::Finished:
-            cout << (char)buffer[i].state << (buffer[i].vote ? " 1\t" : " 0\t");
-            break;
-         case Voter::Block:
-         case Voter::Unblock:
-            cout << (char)buffer[i].state << " " << buffer[i].numBlocked << "\t";
-            break;
-         default:
-            exit(EXIT_FAILURE);
+      cout << "\t";
+
+      this->userStates[i]->state = "";
+      this->userStates[i]->val1 = -1;
+      this->userStates[i]->val2 = -1;
+   }
+   cout << endl;
+}
+
+void Printer::print( Kind kind, char state ){
+
+   int memberId;
+
+   switch(kind){
+      case Parent:
+         memberId = 0;
+         break;
+      case WATCardOffice:
+         memberId = 1;
+         break;
+      case NameServer:
+         memberId = 2;
+         break;
+      case Truck:
+         memberId = 3;
+         break;
+      case BottlingPlant:
+         memberId = 4;
+         break;
+   }
+
+   if ( state == 'F' || this->userStates[memberId]->state != "" ){
+       this->flush();
+   }
+
+   this->userStates[memberId]->state += state;
+
+   if ( state == 'F' ){
+      for ( unsigned int i = 0; i < this->nMembers; i++ ){
+         if ( memberId != i ){
+            this->userStates[i]->state = "...";                
+         }
       }
-      dirty[i] = false;
+      this->flush();
    }
-   cout << endl;
-   needFlush = false;
 }
 
-/*
- * Flush buffer when a party finishes
- */
-void Printer::flush_finish(unsigned int id)
-{
-   for (unsigned int i=0; i<numVoters; i++) {
-      if (i == id) cout << (char)Voter::Finished << (buffer[i].vote ? " 1\t" : " 0\t");
-      else cout << "...\t";
-      dirty[i] = false;
+void Printer::print( Kind kind, char state, int value1 ){
+
+   int memberId;
+
+   switch(kind){
+      case Parent:
+         memberId = 0;
+         break;
+      case WATCardOffice:
+         memberId = 1;
+         break;
+      case NameServer:
+         memberId = 2;
+         break;
+      case Truck:
+         memberId = 3;
+         break;
+      case BottlingPlant:
+         memberId = 4;
+         break;
    }
-   cout << endl;
-   needFlush = false;
+
+   if ( this->userStates[memberId]->state != "" ){
+       this->flush();
+   }
+
+   this->userStates[memberId]->state += state;
+   this->userStates[memberId]->val1 = value1;
 }
 
-/*
- * Flush buffer
- */
-void Printer::print( unsigned int id, Voter::States state )
-{
-   print(id, state, 0, false);
+void Printer::print( Kind kind, char state, int value1, int value2 ){
+
+   int memberId;
+
+   switch(kind){
+      case Parent:
+         memberId = 0;
+         break;
+      case WATCardOffice:
+         memberId = 1;
+         break;
+      case NameServer:
+         memberId = 2;
+         break;
+      case Truck:
+         memberId = 3;
+         break;
+      case BottlingPlant:
+         memberId = 4;
+         break;
+   }
+
+   if ( this->userStates[memberId]->state != "" ){
+       this->flush();
+   }
+
+   this->userStates[memberId]->state += state;
+   this->userStates[memberId]->val1 = value1;
+   this->userStates[memberId]->val1 = value2;
 }
 
-/*
- * Flush buffer
- */
-void Printer::print( unsigned int id, Voter::States state, bool vote )
-{
-   print(id, state, 0, vote);
+void Printer::print( Kind kind, unsigned int lid, char state ){
+
+   int memberId;
+
+   switch(kind){
+      case Student:
+         memberId = 5 + lid;
+         break;
+      case Vending:
+         memberId = 5 + this->nStudents + lid;
+         break;
+      case Courier:
+         memberId = 5 + this->nStudents + this->nVendingMachines + lid;
+         break;
+   }
+
+   if ( state == 'F' || this->userStates[memberId]->state != "" ){
+       this->flush();
+   }
+
+   this->userStates[memberId]->state += state;
+
+   if ( state == 'F' ){
+      for ( unsigned int i = 0; i < this->nMembers; i++ ){
+         if ( memberId != i ){
+            this->userStates[i]->state = "...";                
+         }
+      }
+      this->flush();
+   }
 }
 
-/*
- * Flush buffer
- */
-void Printer::print( unsigned int id, Voter::States state, unsigned int numBlocked )
-{
-   print(id, state, numBlocked, false);
-}
+void Printer::print( Kind kind, unsigned int lid, char state, int value1 ){
 
-/*
- * Flush buffer
- */
-void Printer::print( unsigned int id, Voter::States state, unsigned int numBlocked, bool vote )
-{
-   if (dirty[id] || state == Voter::Finished) flush_buffer();
-   buf_state bs = {id, state, numBlocked, vote};
-   buffer[id] = bs;
-   dirty[id] = true;
-   needFlush = true;
-   if (state == Voter::Finished) flush_finish(id);
+   int memberId;
+
+   switch(kind){
+      case Student:
+         memberId = 5 + lid;
+         break;
+      case Vending:
+         memberId = 5 + this->nStudents + lid;
+         break;
+      case Courier:
+         memberId = 5 + this->nStudents + this->nVendingMachines + lid;
+         break;
+   }
+
+   if ( this->userStates[id]->state != "" ){
+       this->flush();
+   }
+
+   this->userStates[memberId]->state += state;
+   this->userStates[memberId]->val1 = value1;
+}
+void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 ){   int memberId;
+
+   switch(kind){
+      case Student:
+         memberId = 5 + lid;
+         break;
+      case Vending:
+         memberId = 5 + this->nStudents + lid;
+         break;
+      case Courier:
+         memberId = 5 + this->nStudents + this->nVendingMachines + lid;
+         break;
+   }
+
+   if ( this->userStates[id]->state != "" ){
+       this->flush();
+   }
+
+   this->userStates[memberId]->state += state;
+   this->userStates[memberId]->val1 = value1;
+   this->userStates[memberId]->val2 = value2;
 }
