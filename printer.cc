@@ -1,7 +1,6 @@
 #include <uC++.h>
 #include <iostream>
-#include "q1printer.h"
-#include "q1voter.h"
+#include "printer.h"
 
 using namespace std;
 
@@ -11,13 +10,13 @@ using namespace std;
 // Constructor for the printer
 //---------------------------------------------------------------------------------------
 Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers ){
-   this->nStudents = numStudents;
-   this->nVendingMachines = numVendingMachines;
-   this->nCouriers = numCouriers;
+   this->numStudents = numStudents;
+   this->numVendingMachines = numVendingMachines;
+   this->numCouriers = numCouriers;
 
    //Total number of members is the number of students + number of machines
    // + number of couriers + the Parent, WATOffice, Nameserver, Truck, and Plant
-   this->nMembers = this->nStudents + this->nVendingMachines + this->nCouriers + 5;
+   this->nMembers = this->numStudents + this->numVendingMachines + this->numCouriers + 5;
 
    //Create the states array
    this->userStates = new OutputState*[this->nMembers];
@@ -49,21 +48,21 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
    cout << "\t";
    index++;
 
-   for ( unsigned int i = 0; i < this->nStudents; i++ ){
+   for ( unsigned int i = 0; i < this->numStudents; i++ ){
       this->userStates[index] = new OutputState;
       cout << "Stud" << i;
       cout << "\t";
       index++;
    }
 
-   for ( unsigned int i = 0; i < this->nVendingMachines; i++ ){
+   for ( unsigned int i = 0; i < this->numVendingMachines; i++ ){
       this->userStates[index] = new OutputState;
       cout << "Mach" << i;
       cout << "\t";
       index++;
    }
 
-   for ( unsigned int i = 0; i < this->nCouriers; i++ ){
+   for ( unsigned int i = 0; i < this->numCouriers; i++ ){
       this->userStates[index] = new OutputState;
       cout << "Cour" << i;
       cout << "\t";
@@ -228,10 +227,10 @@ void Printer::print( Kind kind, unsigned int lid, char state ){
          memberId = 5 + lid;
          break;
       case Vending:
-         memberId = 5 + this->nStudents + lid;
+         memberId = 5 + this->numStudents + lid;
          break;
       case Courier:
-         memberId = 5 + this->nStudents + this->nVendingMachines + lid;
+         memberId = 5 + this->numStudents + this->numVendingMachines + lid;
          break;
    }
 
@@ -260,10 +259,10 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 ){
          memberId = 5 + lid;
          break;
       case Vending:
-         memberId = 5 + this->nStudents + lid;
+         memberId = 5 + this->numStudents + lid;
          break;
       case Courier:
-         memberId = 5 + this->nStudents + this->nVendingMachines + lid;
+         memberId = 5 + this->numStudents + this->numVendingMachines + lid;
          break;
    }
 
@@ -281,10 +280,10 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1, int va
          memberId = 5 + lid;
          break;
       case Vending:
-         memberId = 5 + this->nStudents + lid;
+         memberId = 5 + this->numStudents + lid;
          break;
       case Courier:
-         memberId = 5 + this->nStudents + this->nVendingMachines + lid;
+         memberId = 5 + this->numStudents + this->numVendingMachines + lid;
          break;
    }
 

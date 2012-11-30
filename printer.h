@@ -18,10 +18,10 @@ using namespace std;
 // Class definition for Printer
 //---------------------------------------------------------------------------------------
 _Monitor Printer {
-   unsigned int nStudents;
-   unsigned int nVendingMachines;
-   unsigned int nCouriers;
-   unsigned int nMembers;
+   unsigned int numStudents;
+   unsigned int numVendingMachines;
+   unsigned int numCouriers;
+   unsigned int numMembers;
 
    struct OutputState{
       OutputState() : state(''), val1(-1), val2(-1){};

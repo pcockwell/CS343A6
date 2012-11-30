@@ -5,6 +5,7 @@
 #include "watcard.h"
 #include "office.h"
 #include "nameserver.h"
+#include "printer.h"
 
 extern MPRNG mprng;
 
