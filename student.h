@@ -7,13 +7,13 @@ _Task WATCardOffice;
 
 _Task Student {
     private:
-        Printer&       printer;
+        Printer&       prt;
         NameServer&    nameServer;
         WATCardOffice& office;
         unsigned int   id;
         unsigned int   maxPurchases;
 
-        enum States { Start = 'S', VendingMachine = 'V', BuySoda = 'B', WATCardLost = 'L', Finished = 'F' };
+        enum States { Start = 'S', VendingMachine = 'V', SodaBought = 'B', WATCardLost = 'L', Finished = 'F' };
 
         void main();
     public:

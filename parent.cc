@@ -9,12 +9,13 @@ extern MPRNG mprng;
 Parent::Parent(Printer& prt, Bank& bank, unsigned int numStudents, unsigned int parentalDelay) :
     prt(prt), bank(bank), numStudents(numStudents), parentalDelay(parentalDelay)
 {
-    prt.print(Printer::Parent, Parent::Start);
+    prt.print(Printer::Parent, (char)Parent::Start);
 }
 
 void Parent::main()
 {
-    while(true){
+    int count = 0;
+    while(count < 50){
         _Accept( ~Parent ){
             break;
         } else {
@@ -25,8 +26,9 @@ void Parent::main()
 
             prt.print(Printer::Parent, (char)Parent::Deposit, studentId, amount);
             bank.deposit(studentId, amount);
+            count++;
         }
     }
 
-    prt.print(Printer::Parent, Parent::Finished);
+    prt.print(Printer::Parent, (char)Parent::Finished);
 }

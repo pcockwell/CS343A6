@@ -33,7 +33,7 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer,
 {
     closingDown = false;
 
-    prt.print( Printer::BottlingPlant, BottlingPlant::Start );
+    prt.print( Printer::BottlingPlant, (char)BottlingPlant::Start );
 
     makeProductionRun();
 
@@ -48,6 +48,8 @@ bool BottlingPlant::getShipment( unsigned int cargo[] )
             cargo[i] += curStock[i];
         }
     }
+
+    prt.print( Printer::BottlingPlant, (char)BottlingPlant::Pickup );
     return closingDown;
 }
 
@@ -57,7 +59,7 @@ BottlingPlant::~BottlingPlant()
     _Accept( getShipment );
     delete truck;
 
-    prt.print( Printer::BottlingPlant, BottlingPlant::Finished );
+    prt.print( Printer::BottlingPlant, (char)BottlingPlant::Finished );
 }
 
 void BottlingPlant::makeProductionRun(){
@@ -66,5 +68,5 @@ void BottlingPlant::makeProductionRun(){
         curStock[i] = mprng(0, maxShippedPerFlavour);
         numGenerated += curStock[i];
     }
-    prt.print( Printer::BottlingPlant, BottlingPlant::Generating, numGenerated );
+    prt.print( Printer::BottlingPlant, (char)BottlingPlant::Generating, numGenerated );
 }

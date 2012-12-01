@@ -29,7 +29,11 @@ void Truck::main()
             numBottlesInCargo += cargo[i];
         }
 
-        prt.print( Printer::Truck, Truck::Pickup, numBottlesInCargo - numBottlesBeforePickup );
+        if ( numBottlesInCargo > 50 ){
+            break;
+        }
+
+        prt.print( Printer::Truck, (char)Truck::Pickup, numBottlesInCargo - numBottlesBeforePickup );
 
         for ( unsigned int i = 0; i < numVendingMachines; i++ ){
 
@@ -37,7 +41,7 @@ void Truck::main()
                 break;
             }
 
-            prt.print( Printer::Truck, Truck::BeginDelivery, numBottlesInCargo );
+            prt.print( Printer::Truck, (char)Truck::BeginDelivery, numBottlesInCargo );
 
             unsigned int *machineInventory = vendingMachines[i]->inventory();
             unsigned int inventoryCount = 0;
@@ -60,13 +64,13 @@ void Truck::main()
                 prt.print( Printer::Truck, (char)Truck::UnsuccessfulFill, inventoryCount - ( numFlavours * maxStockPerFlavour ) );
             }
 
-            prt.print( Printer::Truck, Truck::EndDelivery, numBottlesInCargo );
+            prt.print( Printer::Truck, (char)Truck::EndDelivery, numBottlesInCargo );
 
             vendingMachines[i]->restocked();
         }
 
     }
-    prt.print( Printer::Truck, Truck::Finished );
+    prt.print( Printer::Truck, (char)Truck::Finished );
 }
 
 Truck::Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,

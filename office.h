@@ -37,7 +37,7 @@ _Task WATCardOffice {
 
       void main();
 
-      Printer&       printer;
+      Printer&       prt;
       Bank&          bank;
       unsigned int   numCouriers;
 

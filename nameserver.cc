@@ -34,12 +34,12 @@ NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned 
     for ( unsigned int i = 0; i < numStudents; i++ ){
         assignedMachines[i] = i % numVendingMachines;
     }
-    prt.print( Printer::NameServer, NameServer::Start );
+    prt.print( Printer::NameServer, (char)NameServer::Start );
 }
 
 NameServer::~NameServer()
 {
-    prt.print( Printer::NameServer, NameServer::Finished );
+    prt.print( Printer::NameServer, (char)NameServer::Finished );
     delete vendingMachines;
     delete assignedMachines;
 }

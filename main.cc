@@ -109,5 +109,4 @@ void uMain::main()
     for (int i=0; i<params.numVendingMachines; i++) {
         delete machines[i];
     }
-
 }

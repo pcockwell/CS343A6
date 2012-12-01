@@ -214,7 +214,7 @@ void Printer::print( Kind kind, char state, int value1, int value2 ){
 
     userStates[memberId]->state += state;
     userStates[memberId]->val1 = value1;
-    userStates[memberId]->val1 = value2;
+    userStates[memberId]->val2 = value2;
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state ){

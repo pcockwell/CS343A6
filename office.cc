@@ -2,14 +2,16 @@
 #include "office.h"
 #include "MPRNG.h"
 #include "bank.h"
+#include "printer.h"
 
 extern MPRNG mprng;
 
 // WATCardOffice
 /*{{{*/
 WATCardOffice::WATCardOffice( Printer &prt, Bank &bank, unsigned int numCouriers ) :
-    printer(prt), bank(bank), numCouriers(numCouriers)
+    prt(prt), bank(bank), numCouriers(numCouriers)
 {
+    prt.print( Printer::WATCardOffice, (char)WATCardOffice::Start );
 }
 
 WATCardOffice::~WATCardOffice ()
@@ -17,6 +19,7 @@ WATCardOffice::~WATCardOffice ()
     for (int i=0; i<couriers.size(); i++) {
         delete couriers[i];
     }
+    prt.print( Printer::WATCardOffice, (char)WATCardOffice::Finished );
 }
 
 // Create <numCouriers> couriers
@@ -34,6 +37,7 @@ FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
     Job *j = new Job(args);
     jobs.push(j);
     jobReady.signal();
+    prt.print( Printer::WATCardOffice, (char)WATCardOffice::CreationComplete, sid, amount );
     return j->result;
 }
 
@@ -43,12 +47,14 @@ FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard
     Job *j = new Job(args);
     jobs.push(j);
     jobReady.signal();
+    prt.print( Printer::WATCardOffice, (char)WATCardOffice::TransferComplete, sid, amount );
     return j->result;
 }
 
 WATCardOffice::Job* WATCardOffice::requestWork()
 {
     if (jobs.size() == 0) jobReady.wait();
+    prt.print( Printer::WATCardOffice, (char)WATCardOffice::CourierComplete );
     Job *j = jobs.front();
     jobs.pop();
     return j;
@@ -67,6 +73,7 @@ void WATCardOffice::Courier::main()
 {
     for (;;) {
         Job *j = office.requestWork();
+        //prt.print( Printer::Courier, (char)WATCardOffice::Courier::StartTransfer, j->args.sid, j->args.amount );
 
         // do work to transfer money
         WATCard *card = j->args.card == NULL ? new WATCard : j->args.card;
@@ -80,6 +87,7 @@ void WATCardOffice::Courier::main()
             continue;
         }
         j->result.delivery(card);
+        //prt.print( Printer::Courier, (char)WATCardOffice::Courier::CompleteTransfer, j->args.sid, j->args.amount );
     }
 }
 /*}}}*/
