@@ -1,10 +1,9 @@
 #include <uC++.h>
 #include "bank.h"
 
-Bank::Bank (unsigned int numStudents)
+Bank::Bank (unsigned int numStudents) :
+    numStudents(numStudents)
 {
-    numStudents = numStudents;
-
     accountBalances = new unsigned int[numStudents];
     funds = new uCondition[numStudents];
 

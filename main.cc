@@ -9,6 +9,17 @@
 #include <cstdlib>
 #include "MPRNG.h"
 #include "config.h"
+#include "student.h"
+#include "watcard.h"
+#include "office.h"
+#include "bank.h"
+#include "parent.h"
+#include "vending.h"
+#include "nameserver.h"
+#include "plant.h"
+#include "truck.h"
+#include "printer.h"
+
 
 using namespace std;
 
@@ -70,5 +81,31 @@ void uMain::main()
     // reading config
     ConfigParms params;
     processConfigFile(config_file.c_str(), params);
+
+    vector<VendingMachine *> machines;
+    vector<Student *> students;
+
+    // printer, bank, parent, office, name server, vending machines, plant, 
+    // stduents
+    Printer printer(params.numStudents, params.numVendingMachines, params.numCouriers);
+    Bank bank(params.numStudents);
+    Parent parent(printer, bank, params.numStudents, params.parentalDelay);
+    WATCardOffice office(printer, bank, params.numCouriers);
+    NameServer server(printer, params.numVendingMachines, params.numStudents);
+    for (int i=0; i<params.numVendingMachines; i++) {
+        machines.push_back(new VendingMachine(printer, server, i, params.sodaCost, params.maxStockPerFlavour));
+    }
+    BottlingPlant *plant = new BottlingPlant(printer, server, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
+    for (int i=0; i<params.numStudents; i++) {
+        students.push_back(new Student(printer, server, office, i, params.maxPurchases));
+    }
+
+
+    for (int i=0; i<params.numVendingMachines; i++) {
+        delete machines[i];
+    }
+    for (int i=0; i<params.numStudents; i++) {
+        delete students[i];
+    }
 
 }

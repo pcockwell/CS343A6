@@ -23,12 +23,9 @@ void NameServer::main()
 }
 
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines,
-        unsigned int numStudents ) : prt(prt)
+        unsigned int numStudents ) :
+    prt(prt), numStudents(numStudents), numVendingMachines(numVendingMachines), registeredMachines(0)
 {
-    numStudents = numStudents;
-    numVendingMachines = numVendingMachines;
-    registeredMachines = 0;
-
     vendingMachines = new VendingMachine*[numVendingMachines];
     assignedMachines = new unsigned int[numStudents];
 

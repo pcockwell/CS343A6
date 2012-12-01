@@ -23,16 +23,20 @@ void BottlingPlant::main()
 }
 
 BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer,
-        unsigned int numVendingMachines,
-        unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
-        unsigned int timeBetweenShipments ) : prt(prt), nameServer(nameServer)
+        unsigned int numVendingMachines, unsigned int maxShippedPerFlavour,
+        unsigned int maxStockPerFlavour, unsigned int timeBetweenShipments ) :
+    prt(prt), nameServer(nameServer),
+    numVendingMachines(numVendingMachines),
+    maxShippedPerFlavour(maxShippedPerFlavour),
+    maxStockPerFlavour(maxStockPerFlavour),
+    timeBetweenShipments(timeBetweenShipments)
 {
-
+    /*
     numVendingMachines = numVendingMachines;
     maxShippedPerFlavour = maxShippedPerFlavour;
     maxStockPerFlavour = maxStockPerFlavour;
     timeBetweenShipments = timeBetweenShipments;
-
+*/
     closingDown = false;
 
     prt.print( Printer::BottlingPlant, BottlingPlant::Start );

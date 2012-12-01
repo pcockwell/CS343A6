@@ -20,11 +20,9 @@ void VendingMachine::main()
 }
 
 VendingMachine::VendingMachine( Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
-        unsigned int maxStockPerFlavour ) : prt(prt), nameServer(nameServer)
+        unsigned int maxStockPerFlavour ) :
+    prt(prt), nameServer(nameServer), machineId(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour)
 {
-    machineId = id;
-    sodaCost = sodaCost;
-    maxStockPerFlavour = maxStockPerFlavour;
 
     for (unsigned int i = 0; i < numFlavours; i++){
         inventories[i] = 0;
