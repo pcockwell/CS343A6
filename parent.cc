@@ -20,7 +20,7 @@ void Parent::main()
         } else {
             yield(parentalDelay);
 
-            unsigned int studentId = mprng(1, numStudents);
+            unsigned int studentId = mprng(0, numStudents - 1);
             unsigned int amount = mprng(1, 3);
 
             prt.print(Printer::Parent, (char)Parent::Deposit, studentId, amount);

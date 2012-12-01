@@ -17,7 +17,7 @@ Student::Student( Printer &prt, NameServer &nameServer, WATCardOffice
 void Student::main()
 {
     // Random number of drinks to buy
-    int buy = mprng(1, maxPurchases - 1);
+    int buy = mprng(1, maxPurchases);
 
     // Random flavour
     VendingMachine::Flavours flavor = (VendingMachine::Flavours)mprng(0, 3);
