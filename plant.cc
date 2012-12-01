@@ -14,9 +14,9 @@ void BottlingPlant::main()
         _Accept( ~BottlingPlant ){
             break;
         } or _Accept( getShipment ){
-            this->prt.print( Printer::BottlingPlant, BottlingPlant::Pickup );
-            this->makeProductionRun();
-            yield(this->timeBetweenShipments);
+            prt.print( Printer::BottlingPlant, BottlingPlant::Pickup );
+            makeProductionRun();
+            yield(timeBetweenShipments);
         }
     }
 
@@ -28,16 +28,16 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer,
         unsigned int timeBetweenShipments ) : prt(prt), nameServer(nameServer)
 {
 
-    this->numVendingMachines = numVendingMachines;
-    this->maxShippedPerFlavour = maxShippedPerFlavour;
-    this->maxStockPerFlavour = maxStockPerFlavour;
-    this->timeBetweenShipments = timeBetweenShipments;
+    numVendingMachines = numVendingMachines;
+    maxShippedPerFlavour = maxShippedPerFlavour;
+    maxStockPerFlavour = maxStockPerFlavour;
+    timeBetweenShipments = timeBetweenShipments;
 
-    this->closingDown = false;
+    closingDown = false;
 
-    this->prt.print( Printer::BottlingPlant, BottlingPlant::Start );
+    prt.print( Printer::BottlingPlant, BottlingPlant::Start );
 
-    this->makeProductionRun();
+    makeProductionRun();
 
     truck = new Truck( prt, nameServer, *this, numVendingMachines, maxStockPerFlavour );
 
@@ -45,28 +45,28 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer,
 
 bool BottlingPlant::getShipment( unsigned int cargo[] )
 {
-    if ( !this->closingDown ){
-        for ( unsigned int i = 0; i < this->numFlavours; i++ ){
+    if ( !closingDown ){
+        for ( unsigned int i = 0; i < numFlavours; i++ ){
             cargo[i] += curStock[i];
         }
     }
-    return this->closingDown;
+    return closingDown;
 }
 
 BottlingPlant::~BottlingPlant()
 {
-    this->closingDown = true;
+    closingDown = true;
     _Accept( getShipment );
     delete truck;
 
-    this->prt.print( Printer::BottlingPlant, BottlingPlant::Finished );
+    prt.print( Printer::BottlingPlant, BottlingPlant::Finished );
 }
 
 void BottlingPlant::makeProductionRun(){
     int numGenerated = 0;
-    for ( unsigned int i = 0; i < this->numFlavours; i++ ){
-        curStock[i] = mprng(0, this->maxShippedPerFlavour);
+    for ( unsigned int i = 0; i < numFlavours; i++ ){
+        curStock[i] = mprng(0, maxShippedPerFlavour);
         numGenerated += curStock[i];
     }
-    this->prt.print( Printer::BottlingPlant, BottlingPlant::Generating, numGenerated );
+    prt.print( Printer::BottlingPlant, BottlingPlant::Generating, numGenerated );
 }

@@ -15,73 +15,73 @@ void Truck::main()
         yield(mprng(1,10));
 
         int numBottlesBeforePickup = 0;
-        for (unsigned int i = 0; i < this->numFlavours; i++){
-            numBottlesBeforePickup += this->cargo[i];
+        for (unsigned int i = 0; i < numFlavours; i++){
+            numBottlesBeforePickup += cargo[i];
         }
 
-        plantClosed = this->plant.getShipment(cargo);
+        plantClosed = plant.getShipment(cargo);
         if ( plantClosed ){
             break;
         }
 
         int numBottlesInCargo = 0;
-        for (unsigned int i = 0; i < this->numFlavours; i++){
-            numBottlesInCargo += this->cargo[i];
+        for (unsigned int i = 0; i < numFlavours; i++){
+            numBottlesInCargo += cargo[i];
         }
 
-        this->prt.print( Printer::Truck, Truck::Pickup, numBottlesInCargo - numBottlesBeforePickup );
+        prt.print( Printer::Truck, Truck::Pickup, numBottlesInCargo - numBottlesBeforePickup );
 
-        for ( unsigned int i = 0; i < this->numVendingMachines; i++ ){
+        for ( unsigned int i = 0; i < numVendingMachines; i++ ){
 
             if ( numBottlesInCargo == 0 ){
                 break;
             }
 
-            this->prt.print( Printer::Truck, Truck::BeginDelivery, numBottlesInCargo );
+            prt.print( Printer::Truck, Truck::BeginDelivery, numBottlesInCargo );
 
             unsigned int *machineInventory = vendingMachines[i]->inventory();
             unsigned int inventoryCount = 0;
 
             for ( unsigned int flavour = 0; flavour < numFlavours; flavour++ ){
-                if ( machineInventory[flavour] < this->maxStockPerFlavour && this->cargo[flavour] > 0 ){
+                if ( machineInventory[flavour] < maxStockPerFlavour && cargo[flavour] > 0 ){
 
-                    unsigned int inventoryRoom = this->maxStockPerFlavour - machineInventory[flavour];
-                    unsigned int numTransferred = ( this->cargo[flavour] <= inventoryRoom ? this->cargo[flavour] : inventoryRoom );
+                    unsigned int inventoryRoom = maxStockPerFlavour - machineInventory[flavour];
+                    unsigned int numTransferred = ( cargo[flavour] <= inventoryRoom ? cargo[flavour] : inventoryRoom );
 
                     machineInventory[flavour] += numTransferred;
-                    this->cargo[flavour] -= numTransferred;
+                    cargo[flavour] -= numTransferred;
                     numBottlesInCargo -= numTransferred;
                 }
 
                 inventoryCount += machineInventory[flavour];
             }
 
-            if ( inventoryCount != this->numFlavours * this->maxStockPerFlavour ){
-                this->prt.print( Printer::Truck, (char)Truck::UnsuccessfulFill, inventoryCount - ( this->numFlavours * this->maxStockPerFlavour ) );
+            if ( inventoryCount != numFlavours * maxStockPerFlavour ){
+                prt.print( Printer::Truck, (char)Truck::UnsuccessfulFill, inventoryCount - ( numFlavours * maxStockPerFlavour ) );
             }
 
-            this->prt.print( Printer::Truck, Truck::EndDelivery, numBottlesInCargo );
+            prt.print( Printer::Truck, Truck::EndDelivery, numBottlesInCargo );
 
             vendingMachines[i]->restocked();
         }
 
     }
-    this->prt.print( Printer::Truck, Truck::Finished );
+    prt.print( Printer::Truck, Truck::Finished );
 }
 
 Truck::Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,
         unsigned int numVendingMachines, unsigned int maxStockPerFlavour )
 : prt(prt), nameServer(nameServer), plant(plant)
 {
-    this->numVendingMachines = numVendingMachines;
-    this->maxStockPerFlavour = maxStockPerFlavour;
+    numVendingMachines = numVendingMachines;
+    maxStockPerFlavour = maxStockPerFlavour;
 
-    for (unsigned int i = 0; i < this->numFlavours; i++){
-        this->cargo[i] = 0;
+    for (unsigned int i = 0; i < numFlavours; i++){
+        cargo[i] = 0;
     }
 
-    this->vendingMachines = nameServer.getMachineList();
+    vendingMachines = nameServer.getMachineList();
 
-    this->prt.print( Printer::Truck, Truck::Start );
+    prt.print( Printer::Truck, Truck::Start );
 }
 

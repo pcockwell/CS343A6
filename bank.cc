@@ -3,13 +3,13 @@
 
 Bank::Bank (unsigned int numStudents)
 {
-    this->numStudents = numStudents;
+    numStudents = numStudents;
 
-    this->accountBalances = new unsigned int[this->numStudents];
-    this->funds = new uCondition[this->numStudents];
+    accountBalances = new unsigned int[numStudents];
+    funds = new uCondition[numStudents];
 
-    for ( unsigned int i = 0; i < this->numStudents; i++ ){
-        this->accountBalances[i] = 0;
+    for ( unsigned int i = 0; i < numStudents; i++ ){
+        accountBalances[i] = 0;
     }
 }
 
@@ -20,14 +20,14 @@ Bank::~Bank(){
 
 void Bank::deposit( unsigned int id, unsigned int amount )
 {
-    this->accountBalances[id] += amount;
-    this->funds[id].signal();
+    accountBalances[id] += amount;
+    funds[id].signal();
 }
 
 void Bank::withdraw( unsigned int id, unsigned int amount )
 {
-    while( this->accountBalances[id] < amount ){
-        this->funds[id].wait();
+    while( accountBalances[id] < amount ){
+        funds[id].wait();
     }
-    this->accountBalances[id] -= amount;
+    accountBalances[id] -= amount;
 }

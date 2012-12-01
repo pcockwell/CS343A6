@@ -5,9 +5,9 @@
 
 void NameServer::main()
 {
-    while( this->registeredMachines < this->numVendingMachines ){
+    while( registeredMachines < numVendingMachines ){
         _Accept( VMregister ){
-            this->registeredMachines++;
+            registeredMachines++;
         }
     } 
 
@@ -25,44 +25,44 @@ void NameServer::main()
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines,
         unsigned int numStudents ) : prt(prt)
 {
-    this->numStudents = numStudents;
-    this->numVendingMachines = numVendingMachines;
-    this->registeredMachines = 0;
+    numStudents = numStudents;
+    numVendingMachines = numVendingMachines;
+    registeredMachines = 0;
 
-    this->vendingMachines = new VendingMachine*[numVendingMachines];
-    this->assignedMachines = new unsigned int[numStudents];
+    vendingMachines = new VendingMachine*[numVendingMachines];
+    assignedMachines = new unsigned int[numStudents];
 
-    for ( unsigned int i = 0; i < this->numStudents; i++ ){
-        this->assignedMachines[i] = i % this->numVendingMachines;
+    for ( unsigned int i = 0; i < numStudents; i++ ){
+        assignedMachines[i] = i % numVendingMachines;
     }
-    this->prt.print( Printer::NameServer, NameServer::Start );
+    prt.print( Printer::NameServer, NameServer::Start );
 }
 
 NameServer::~NameServer()
 {
-    this->prt.print( Printer::NameServer, NameServer::Finished );
+    prt.print( Printer::NameServer, NameServer::Finished );
     delete vendingMachines;
     delete assignedMachines;
 }
 
 void NameServer::VMregister( VendingMachine *vendingmachine )
 {
-    this->prt.print( Printer::NameServer, (char)NameServer::Register, vendingmachine->getId() );
-    this->vendingMachines[this->registeredMachines] = vendingmachine;
+    prt.print( Printer::NameServer, (char)NameServer::Register, vendingmachine->getId() );
+    vendingMachines[registeredMachines] = vendingmachine;
 }
 
 VendingMachine* NameServer::getMachine( unsigned int id )
 {
-    unsigned int machineId = this->assignedMachines[id];
+    unsigned int machineId = assignedMachines[id];
 
-    this->prt.print( Printer::NameServer, (char)NameServer::NewMachine, id, machineId );
+    prt.print( Printer::NameServer, (char)NameServer::NewMachine, id, machineId );
 
-    VendingMachine* returnedMachine = this->vendingMachines[machineId];
-    this->assignedMachines[id] = (this->assignedMachines[id] + 1) % numVendingMachines;
+    VendingMachine* returnedMachine = vendingMachines[machineId];
+    assignedMachines[id] = (assignedMachines[id] + 1) % numVendingMachines;
     return returnedMachine;
 }
 
 VendingMachine** NameServer::getMachineList()
 {
-    return this->vendingMachines;
+    return vendingMachines;
 }
