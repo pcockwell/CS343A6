@@ -1,73 +1,76 @@
 #include <uC++.h>
 #include "vending.h"
+#include "printer.h"
+#include "nameserver.h"
+#include "watcard.h"
 
 void VendingMachine::main()
 {
-	while( true ){
-		_Accept( ~VendingMachine ){
-			break;
-		} or _Accept( inventory ){
-			_Accept( restocked );
-		} or _Accept ( buy ) {
+    while( true ){
+        _Accept( ~VendingMachine ){
+            break;
+        } or _Accept( inventory ){
+            _Accept( restocked );
+        } or _Accept ( buy ) {
 
-		}
-	}
-	
-	this->prt.print( Printer::Vending, this->machineId, VendingMachine::Finished );
+        }
+    }
+
+    prt.print( Printer::Vending, machineId, (char)VendingMachine::Finished );
 }
 
 VendingMachine::VendingMachine( Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,
-      unsigned int maxStockPerFlavour ) : prt(prt), nameServer(nameServer)
+        unsigned int maxStockPerFlavour ) : prt(prt), nameServer(nameServer)
 {
-	this->machineId = id;
-	this->sodaCost = sodaCost;
-	this->maxStockPerFlavour = maxStockPerFlavour;
+    machineId = id;
+    sodaCost = sodaCost;
+    maxStockPerFlavour = maxStockPerFlavour;
 
-	for (unsigned int i = 0; i < this->numFlavours; i++){
-		this->inventory[i] = 0;
-	}
-	
-	this->prt.print( Printer::Vending, this->machineId, VendingMachine::Start );
+    for (unsigned int i = 0; i < numFlavours; i++){
+        inventories[i] = 0;
+    }
 
-	nameServer.VMregister( this );
+    prt.print( Printer::Vending, machineId, (char)VendingMachine::Start );
+
+    nameServer.VMregister( this );
 }
 
 VendingMachine::Status VendingMachine::buy( Flavours flavour, WATCard &card )
 {
-	if ( inventory[flavour] == 0 ){
-		return STOCK;
-	}
+    if ( inventories[flavour] == 0 ){
+        return STOCK;
+    }
 
-	if ( card->getBalance() < this->sodaCost ){
-		return FUNDS;
-	}
+    if ( card.getBalance() < sodaCost ){
+        return FUNDS;
+    }
 
-	card->withdraw( this->sodaCost );
-	inventory[flavour] -= 1;
+    card.withdraw( sodaCost );
+    inventories[flavour] -= 1;
 
-	this->prt.print( Printer::Vending, this->machineId, VendingMachine::SodaBought, flavour, inventory[flavour] );
+    prt.print( Printer::Vending, machineId, VendingMachine::SodaBought, flavour, inventories[flavour] );
 
-	return BUY;
+    return BUY;
 }
 
 unsigned int *VendingMachine::inventory()
 {
-	this->prt.print( Printer::Vending, this->machineId, VendingMachine::StartReload );
-	return this->inventory;
+    prt.print( Printer::Vending, machineId, (char)VendingMachine::StartReload );
+    return inventories;
 }
 
 void VendingMachine::restocked()
 {
-	this->prt.print( Printer::Vending, this->machineId, VendingMachine::EndReload );
+    prt.print( Printer::Vending, machineId, (char)VendingMachine::EndReload );
 }
 
 _Nomutex unsigned int VendingMachine::cost()
 {
-	return this->sodaCost;
+    return sodaCost;
 }
 
 _Nomutex unsigned int VendingMachine::getId()
 {
-	return this->machineId;
+    return machineId;
 }
 

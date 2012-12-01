@@ -5,17 +5,17 @@ _Monitor Printer;
 _Monitor Bank;
 
 _Task Parent {
-   private:
-   	Printer &prt;
-   	Bank &bank;
-   	unsigned int numStudents;
-   	unsigned int parentalDelay;
+    private:
+        Printer &prt;
+        Bank &bank;
+        unsigned int numStudents;
+        unsigned int parentalDelay;
 
-      enum States { Start = 'S', Deposit = 'D', Finished = 'F' };
+        enum States { Start = 'S', Deposit = 'D', Finished = 'F' };
 
-      void main();
-   public:
-      Parent( Printer &prt, Bank &bank, unsigned int numStudents, unsigned int parentalDelay );
+        void main();
+    public:
+        Parent( Printer &prt, Bank &bank, unsigned int numStudents, unsigned int parentalDelay );
 };
 
 #endif

@@ -1,30 +1,32 @@
 #include <uC++.h>
 #include "parent.h"
+#include "printer.h"
+#include "MPRNG.h"
+#include "bank.h"
 
-Parent::Parent(Printer& prt, Bank& bank, unsigned int numStudents,
-      unsigned int parentalDelay) : prt(prt), bank(bank)
+extern MPRNG mprng;
+
+Parent::Parent(Printer& prt, Bank& bank, unsigned int numStudents, unsigned int parentalDelay) :
+    prt(prt), bank(bank), numStudents(numStudents), parentalDelay(parentalDelay)
 {
-	this->numStudents = numStudents;
-	this->parentalDelay = parentalDelay;
-
-	this->prt.print(Printer::Parent, Parent::Start);
+    prt.print(Printer::Parent, Parent::Start);
 }
 
 void Parent::main()
 {
-	while(true){
-		_Accept( ~Parent ){
-			break;
-		} else {
-			yield(this->parentalDelay);
-			
-			unsigned int studentId = mprng(1, numStudents);
-			unsigned int amount = mprng(1, 3);
+    while(true){
+        _Accept( ~Parent ){
+            break;
+        } else {
+            yield(parentalDelay);
 
-			this->prt.print(Printer::Parent, Parent::Deposit, studentId, amount);
-			bank.deposit(studentId, amount);
-		}
-	}
+            unsigned int studentId = mprng(1, numStudents);
+            unsigned int amount = mprng(1, 3);
 
-	this->prt.print(Printer::Parent, Parent::Finished);
+            prt.print(Printer::Parent, (char)Parent::Deposit, studentId, amount);
+            bank.deposit(studentId, amount);
+        }
+    }
+
+    prt.print(Printer::Parent, Parent::Finished);
 }

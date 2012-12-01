@@ -4,24 +4,23 @@
 #include "watcard.h"
 
 
-WATCard::WATCard()
-   : balance(0)
+WATCard::WATCard() : balance(0)
 {
 }
 
 void WATCard::deposit( unsigned int amount )
 {
-   balance += amount;
+    balance += amount;
 }
 
 void WATCard::withdraw( unsigned int amount )
 {
-   assert(amount <= balance);
-   balance -= amount;
+    assert(amount <= balance);
+    balance -= amount;
 }
 
 unsigned int WATCard::getBalance()
 {
-   return balance;
+    return balance;
 }
 

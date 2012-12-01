@@ -6,18 +6,18 @@ _Task NameServer;
 _Task WATCardOffice;
 
 _Task Student {
-   private:
-      Printer&       printer;
-      NameServer&    nameServer;
-      WATCardOffice& office;
-      unsigned int   id;
-      unsigned int   maxPurchases;
+    private:
+        Printer&       printer;
+        NameServer&    nameServer;
+        WATCardOffice& office;
+        unsigned int   id;
+        unsigned int   maxPurchases;
 
-      enum States { Start = 'S', VendingMachine = 'V', BuySoda = 'B', WATCardLost = 'L', Finished = 'F' };
+        enum States { Start = 'S', VendingMachine = 'V', BuySoda = 'B', WATCardLost = 'L', Finished = 'F' };
 
-      void main();
-   public:
-      Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, unsigned int id,
-            unsigned int maxPurchases );
+        void main();
+    public:
+        Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, unsigned int id,
+                unsigned int maxPurchases );
 };
 #endif

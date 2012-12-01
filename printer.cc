@@ -9,73 +9,74 @@ using namespace std;
 //
 // Constructor for the printer
 //---------------------------------------------------------------------------------------
-Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers ){
-   this->numStudents = numStudents;
-   this->numVendingMachines = numVendingMachines;
-   this->numCouriers = numCouriers;
+Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers )
+{
+    numStudents = numStudents;
+    numVendingMachines = numVendingMachines;
+    numCouriers = numCouriers;
 
-   //Total number of members is the number of students + number of machines
-   // + number of couriers + the Parent, WATOffice, Nameserver, Truck, and Plant
-   this->numMembers = this->numStudents + this->numVendingMachines + this->numCouriers + 5;
+    //Total number of members is the number of students + number of machines
+    // + number of couriers + the Parent, WATOffice, Nameserver, Truck, and Plant
+    numMembers = numStudents + numVendingMachines + numCouriers + 5;
 
-   //Create the states array
-   this->userStates = new OutputState*[this->numMembers];
+    //Create the states array
+    userStates = new OutputState*[numMembers];
 
-   int index = 0;
+    int index = 0;
 
-   this->userStates[index] = new OutputState;
-   cout << "Parent";
-   cout << "\t";
-   index++;
+    userStates[index] = new OutputState;
+    cout << "Parent";
+    cout << "\t";
+    index++;
 
-   this->userStates[index] = new OutputState;
-   cout << "WATOff";
-   cout << "\t";
-   index++;
+    userStates[index] = new OutputState;
+    cout << "WATOff";
+    cout << "\t";
+    index++;
 
-   this->userStates[index] = new OutputState;
-   cout << "Names";
-   cout << "\t";
-   index++;
+    userStates[index] = new OutputState;
+    cout << "Names";
+    cout << "\t";
+    index++;
 
-   this->userStates[index] = new OutputState;
-   cout << "Truck";
-   cout << "\t";
-   index++;
+    userStates[index] = new OutputState;
+    cout << "Truck";
+    cout << "\t";
+    index++;
 
-   this->userStates[index] = new OutputState;
-   cout << "Plant";
-   cout << "\t";
-   index++;
+    userStates[index] = new OutputState;
+    cout << "Plant";
+    cout << "\t";
+    index++;
 
-   for ( unsigned int i = 0; i < this->numStudents; i++ ){
-      this->userStates[index] = new OutputState;
-      cout << "Stud" << i;
-      cout << "\t";
-      index++;
-   }
+    for ( unsigned int i = 0; i < numStudents; i++ ){
+        userStates[index] = new OutputState;
+        cout << "Stud" << i;
+        cout << "\t";
+        index++;
+    }
 
-   for ( unsigned int i = 0; i < this->numVendingMachines; i++ ){
-      this->userStates[index] = new OutputState;
-      cout << "Mach" << i;
-      cout << "\t";
-      index++;
-   }
+    for ( unsigned int i = 0; i < numVendingMachines; i++ ){
+        userStates[index] = new OutputState;
+        cout << "Mach" << i;
+        cout << "\t";
+        index++;
+    }
 
-   for ( unsigned int i = 0; i < this->numCouriers; i++ ){
-      this->userStates[index] = new OutputState;
-      cout << "Cour" << i;
-      cout << "\t";
-      index++;
-   }
+    for ( unsigned int i = 0; i < numCouriers; i++ ){
+        userStates[index] = new OutputState;
+        cout << "Cour" << i;
+        cout << "\t";
+        index++;
+    }
 
-   cout << endl;
+    cout << endl;
 
-   for ( unsigned int i = 0; i < this->numMembers; i++ ){
-      cout << "*******";
-      cout << "\t";
-   }
-   cout << endl;
+    for ( unsigned int i = 0; i < numMembers; i++ ){
+        cout << "*******";
+        cout << "\t";
+    }
+    cout << endl;
 
 }
 
@@ -85,13 +86,13 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
 // Destructor for the printer
 //---------------------------------------------------------------------------------------
 Printer::~Printer(){
-   cout << "***********************" << endl;
+    cout << "***********************" << endl;
 
-   for ( unsigned int i = 0; i < this->numMembers; i++ ){
-       delete userStates[i];
-   }
+    for ( unsigned int i = 0; i < numMembers; i++ ){
+        delete userStates[i];
+    }
 
-   delete userStates;
+    delete userStates;
 }
 
 //---------------------------------------------------------------------------------------
@@ -101,197 +102,197 @@ Printer::~Printer(){
 //---------------------------------------------------------------------------------------
 void Printer::flush(){
 
-   for ( unsigned int i = 0; i < this->numMembers; i++ ){
-      
-      cout << ( this->userStates[i]->state == "" ? "" : this->userStates[i]->state );
-      if ( this->userStates[i]->val1 != -1 ){
-         cout << this->userStates[i]->val1;
-         if ( this->userStates[i]->val2 != -1 ){
-            cout << "," << this->userStates[i]->val2;
-         }
-      }
-      cout << "\t";
+    for ( unsigned int i = 0; i < numMembers; i++ ){
 
-      this->userStates[i]->state = "";
-      this->userStates[i]->val1 = -1;
-      this->userStates[i]->val2 = -1;
-   }
-   cout << endl;
+        cout << ( userStates[i]->state == "" ? "" : userStates[i]->state );
+        if ( userStates[i]->val1 != -1 ){
+            cout << userStates[i]->val1;
+            if ( userStates[i]->val2 != -1 ){
+                cout << "," << userStates[i]->val2;
+            }
+        }
+        cout << "\t";
+
+        userStates[i]->state = "";
+        userStates[i]->val1 = -1;
+        userStates[i]->val2 = -1;
+    }
+    cout << endl;
 }
 
 void Printer::print( Kind kind, char state ){
 
-   int memberId;
+    int memberId;
 
-   switch(kind){
-      case Parent:
-         memberId = 0;
-         break;
-      case WATCardOffice:
-         memberId = 1;
-         break;
-      case NameServer:
-         memberId = 2;
-         break;
-      case Truck:
-         memberId = 3;
-         break;
-      case BottlingPlant:
-         memberId = 4;
-         break;
-   }
+    switch(kind){
+        case Parent:
+            memberId = 0;
+            break;
+        case WATCardOffice:
+            memberId = 1;
+            break;
+        case NameServer:
+            memberId = 2;
+            break;
+        case Truck:
+            memberId = 3;
+            break;
+        case BottlingPlant:
+            memberId = 4;
+            break;
+    }
 
-   if ( state == 'F' || this->userStates[memberId]->state != "" ){
-       this->flush();
-   }
+    if ( state == 'F' || userStates[memberId]->state != "" ){
+        flush();
+    }
 
-   this->userStates[memberId]->state += state;
+    userStates[memberId]->state += state;
 
-   if ( state == 'F' ){
-      for ( unsigned int i = 0; i < this->numMembers; i++ ){
-         if ( memberId != i ){
-            this->userStates[i]->state = "...";                
-         }
-      }
-      this->flush();
-   }
+    if ( state == 'F' ){
+        for ( unsigned int i = 0; i < numMembers; i++ ){
+            if ( memberId != i ){
+                userStates[i]->state = "...";                
+            }
+        }
+        flush();
+    }
 }
 
 void Printer::print( Kind kind, char state, int value1 ){
 
-   int memberId;
+    int memberId;
 
-   switch(kind){
-      case Parent:
-         memberId = 0;
-         break;
-      case WATCardOffice:
-         memberId = 1;
-         break;
-      case NameServer:
-         memberId = 2;
-         break;
-      case Truck:
-         memberId = 3;
-         break;
-      case BottlingPlant:
-         memberId = 4;
-         break;
-   }
+    switch(kind){
+        case Parent:
+            memberId = 0;
+            break;
+        case WATCardOffice:
+            memberId = 1;
+            break;
+        case NameServer:
+            memberId = 2;
+            break;
+        case Truck:
+            memberId = 3;
+            break;
+        case BottlingPlant:
+            memberId = 4;
+            break;
+    }
 
-   if ( this->userStates[memberId]->state != "" ){
-       this->flush();
-   }
+    if ( userStates[memberId]->state != "" ){
+        flush();
+    }
 
-   this->userStates[memberId]->state += state;
-   this->userStates[memberId]->val1 = value1;
+    userStates[memberId]->state += state;
+    userStates[memberId]->val1 = value1;
 }
 
 void Printer::print( Kind kind, char state, int value1, int value2 ){
 
-   int memberId;
+    int memberId;
 
-   switch(kind){
-      case Parent:
-         memberId = 0;
-         break;
-      case WATCardOffice:
-         memberId = 1;
-         break;
-      case NameServer:
-         memberId = 2;
-         break;
-      case Truck:
-         memberId = 3;
-         break;
-      case BottlingPlant:
-         memberId = 4;
-         break;
-   }
+    switch(kind){
+        case Parent:
+            memberId = 0;
+            break;
+        case WATCardOffice:
+            memberId = 1;
+            break;
+        case NameServer:
+            memberId = 2;
+            break;
+        case Truck:
+            memberId = 3;
+            break;
+        case BottlingPlant:
+            memberId = 4;
+            break;
+    }
 
-   if ( this->userStates[memberId]->state != "" ){
-       this->flush();
-   }
+    if ( userStates[memberId]->state != "" ){
+        flush();
+    }
 
-   this->userStates[memberId]->state += state;
-   this->userStates[memberId]->val1 = value1;
-   this->userStates[memberId]->val1 = value2;
+    userStates[memberId]->state += state;
+    userStates[memberId]->val1 = value1;
+    userStates[memberId]->val1 = value2;
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state ){
 
-   int memberId;
+    int memberId;
 
-   switch(kind){
-      case Student:
-         memberId = 5 + lid;
-         break;
-      case Vending:
-         memberId = 5 + this->numStudents + lid;
-         break;
-      case Courier:
-         memberId = 5 + this->numStudents + this->numVendingMachines + lid;
-         break;
-   }
+    switch(kind){
+        case Student:
+            memberId = 5 + lid;
+            break;
+        case Vending:
+            memberId = 5 + numStudents + lid;
+            break;
+        case Courier:
+            memberId = 5 + numStudents + numVendingMachines + lid;
+            break;
+    }
 
-   if ( state == 'F' || this->userStates[memberId]->state != "" ){
-       this->flush();
-   }
+    if ( state == 'F' || userStates[memberId]->state != "" ){
+        flush();
+    }
 
-   this->userStates[memberId]->state += state;
+    userStates[memberId]->state += state;
 
-   if ( state == 'F' ){
-      for ( unsigned int i = 0; i < this->numMembers; i++ ){
-         if ( memberId != i ){
-            this->userStates[i]->state = "...";                
-         }
-      }
-      this->flush();
-   }
+    if ( state == 'F' ){
+        for ( unsigned int i = 0; i < numMembers; i++ ){
+            if ( memberId != i ){
+                userStates[i]->state = "...";                
+            }
+        }
+        flush();
+    }
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state, int value1 ){
 
-   int memberId;
+    int memberId;
 
-   switch(kind){
-      case Student:
-         memberId = 5 + lid;
-         break;
-      case Vending:
-         memberId = 5 + this->numStudents + lid;
-         break;
-      case Courier:
-         memberId = 5 + this->numStudents + this->numVendingMachines + lid;
-         break;
-   }
+    switch(kind){
+        case Student:
+            memberId = 5 + lid;
+            break;
+        case Vending:
+            memberId = 5 + numStudents + lid;
+            break;
+        case Courier:
+            memberId = 5 + numStudents + numVendingMachines + lid;
+            break;
+    }
 
-   if ( this->userStates[id]->state != "" ){
-       this->flush();
-   }
+    if ( userStates[lid]->state != "" ){
+        flush();
+    }
 
-   this->userStates[memberId]->state += state;
-   this->userStates[memberId]->val1 = value1;
+    userStates[memberId]->state += state;
+    userStates[memberId]->val1 = value1;
 }
 void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 ){   int memberId;
 
-   switch(kind){
-      case Student:
-         memberId = 5 + lid;
-         break;
-      case Vending:
-         memberId = 5 + this->numStudents + lid;
-         break;
-      case Courier:
-         memberId = 5 + this->numStudents + this->numVendingMachines + lid;
-         break;
-   }
+    switch(kind){
+        case Student:
+            memberId = 5 + lid;
+            break;
+        case Vending:
+            memberId = 5 + numStudents + lid;
+            break;
+        case Courier:
+            memberId = 5 + numStudents + numVendingMachines + lid;
+            break;
+    }
 
-   if ( this->userStates[id]->state != "" ){
-       this->flush();
-   }
+    if ( userStates[lid]->state != "" ){
+        flush();
+    }
 
-   this->userStates[memberId]->state += state;
-   this->userStates[memberId]->val1 = value1;
-   this->userStates[memberId]->val2 = value2;
+    userStates[memberId]->state += state;
+    userStates[memberId]->val1 = value1;
+    userStates[memberId]->val2 = value2;
 }
