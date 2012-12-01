@@ -7,6 +7,9 @@ _Task BottlingPlant;
 
 _Task Truck {
    private:
+
+   	enum States { Start = 'S', Pickup = 'P', BeginDelivery = 'd', UnsuccessfulFill = 'U', EndDelivery = 'D', Finished = 'F' };
+
       void main();
    public:
       Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,

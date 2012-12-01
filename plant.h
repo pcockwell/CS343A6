@@ -3,6 +3,7 @@
 
 _Monitor Printer;
 _Task NameServer;
+_Task Truck;
 
 _Task BottlingPlant {
    private:
@@ -21,7 +22,7 @@ _Task BottlingPlant {
 
    	int curStock[numFlavours];
 
-   	enum States { Start = 'S', Generating = 'G', Pickup = 'P', Finished = 'F' }
+   	enum States { Start = 'S', Generating = 'G', Pickup = 'P', Finished = 'F' };
 
       void main();
       void makeProductionRun();

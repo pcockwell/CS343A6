@@ -7,6 +7,9 @@ class WATCard;
 
 _Task VendingMachine {
    private:
+
+      enum States { Start = 'S', StartReload = 'r', EndReload = 'R', SodaBought = 'B', Finished = 'F' };
+
       void main();
    public:
       enum Flavours { FA, FB, FC, FD }; 			// flavours of soda (YOU DEFINE)
