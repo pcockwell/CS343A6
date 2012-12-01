@@ -47,7 +47,7 @@ bool BottlingPlant::getShipment( unsigned int cargo[] )
 {
 	if ( !this->closingDown ){
 		for ( unsigned int i = 0; i < this->numFlavours; i++ ){
-			cargo[i] = curStock[i];
+			cargo[i] += curStock[i];
 		}
 	}
 	return this->closingDown;

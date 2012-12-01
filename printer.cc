@@ -16,10 +16,10 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
 
    //Total number of members is the number of students + number of machines
    // + number of couriers + the Parent, WATOffice, Nameserver, Truck, and Plant
-   this->nMembers = this->numStudents + this->numVendingMachines + this->numCouriers + 5;
+   this->numMembers = this->numStudents + this->numVendingMachines + this->numCouriers + 5;
 
    //Create the states array
-   this->userStates = new OutputState*[this->nMembers];
+   this->userStates = new OutputState*[this->numMembers];
 
    int index = 0;
 
@@ -71,7 +71,7 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
 
    cout << endl;
 
-   for ( unsigned int i = 0; i < this->nMembers; i++ ){
+   for ( unsigned int i = 0; i < this->numMembers; i++ ){
       cout << "*******";
       cout << "\t";
    }
@@ -87,7 +87,7 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
 Printer::~Printer(){
    cout << "***********************" << endl;
 
-   for ( unsigned int i = 0; i < this->nMembers; i++ ){
+   for ( unsigned int i = 0; i < this->numMembers; i++ ){
        delete userStates[i];
    }
 
@@ -101,7 +101,7 @@ Printer::~Printer(){
 //---------------------------------------------------------------------------------------
 void Printer::flush(){
 
-   for ( unsigned int i = 0; i < this->nMembers; i++ ){
+   for ( unsigned int i = 0; i < this->numMembers; i++ ){
       
       cout << ( this->userStates[i]->state == "" ? "" : this->userStates[i]->state );
       if ( this->userStates[i]->val1 != -1 ){
@@ -148,7 +148,7 @@ void Printer::print( Kind kind, char state ){
    this->userStates[memberId]->state += state;
 
    if ( state == 'F' ){
-      for ( unsigned int i = 0; i < this->nMembers; i++ ){
+      for ( unsigned int i = 0; i < this->numMembers; i++ ){
          if ( memberId != i ){
             this->userStates[i]->state = "...";                
          }
@@ -241,7 +241,7 @@ void Printer::print( Kind kind, unsigned int lid, char state ){
    this->userStates[memberId]->state += state;
 
    if ( state == 'F' ){
-      for ( unsigned int i = 0; i < this->nMembers; i++ ){
+      for ( unsigned int i = 0; i < this->numMembers; i++ ){
          if ( memberId != i ){
             this->userStates[i]->state = "...";                
          }
