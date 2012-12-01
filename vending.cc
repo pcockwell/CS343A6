@@ -8,6 +8,8 @@ void VendingMachine::main()
 			break;
 		} or _Accept( inventory ){
 			_Accept( restocked );
+		} or _Accept ( buy ) {
+
 		}
 	}
 	
