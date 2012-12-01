@@ -7,6 +7,16 @@ class WATCard;
 
 _Task VendingMachine {
    private:
+      Printer &prt;
+      NameServer &nameServer;
+
+      unsigned int machineId;
+      unsigned int sodaCost;
+      unsigned int maxStockPerFlavour;
+
+      const static unsigned int numFlavours = 4;
+
+      unsigned int inventory[numFlavours];
 
       enum States { Start = 'S', StartReload = 'r', EndReload = 'R', SodaBought = 'B', Finished = 'F' };
 

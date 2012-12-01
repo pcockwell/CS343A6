@@ -70,13 +70,13 @@ Truck::Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,
 {
 	this->numVendingMachines = numVendingMachines;
 	this->maxStockPerFlavour = maxStockPerFlavour;
-	
-	this->prt.print( Printer::Truck, Truck::Start );
 
 	for (unsigned int i = 0; i < this->numFlavours; i++){
-		cargo[i] = 0;
+		this->cargo[i] = 0;
 	}
 
 	this->vendingMachines = nameServer.getMachineList();
+	
+	this->prt.print( Printer::Truck, Truck::Start );
 }
 
