@@ -24,9 +24,9 @@ _Monitor Printer {
    unsigned int numMembers;
 
    struct OutputState{
-      OutputState() : state(''), val1(-1), val2(-1){};
+      OutputState() : state(""), val1(-1), val2(-1){};
 
-      char state;
+      string state;
       int val1;
       int val2;
    };
