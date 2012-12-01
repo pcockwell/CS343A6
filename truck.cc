@@ -81,4 +81,3 @@ Truck::Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,
 
     prt.print( Printer::Truck, Truck::Start );
 }
-

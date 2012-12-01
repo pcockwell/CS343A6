@@ -9,11 +9,9 @@ using namespace std;
 //
 // Constructor for the printer
 //---------------------------------------------------------------------------------------
-Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers )
+Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers ) :
+    numStudents(numStudents), numVendingMachines(numVendingMachines), numCouriers(numCouriers)
 {
-    numStudents = numStudents;
-    numVendingMachines = numVendingMachines;
-    numCouriers = numCouriers;
 
     //Total number of members is the number of students + number of machines
     // + number of couriers + the Parent, WATOffice, Nameserver, Truck, and Plant
@@ -267,14 +265,16 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 ){
             break;
     }
 
-    if ( userStates[lid]->state != "" ){
+    if ( userStates[memberId]->state != "" ){
         flush();
     }
 
     userStates[memberId]->state += state;
     userStates[memberId]->val1 = value1;
 }
-void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 ){   int memberId;
+void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 ){   
+
+    int memberId;
 
     switch(kind){
         case Student:
@@ -288,7 +288,7 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1, int va
             break;
     }
 
-    if ( userStates[lid]->state != "" ){
+    if ( userStates[memberId]->state != "" ){
         flush();
     }
 

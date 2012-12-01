@@ -28,7 +28,7 @@ VendingMachine::VendingMachine( Printer &prt, NameServer &nameServer, unsigned i
         inventories[i] = 0;
     }
 
-    prt.print( Printer::Vending, machineId, (char)VendingMachine::Start );
+    prt.print( Printer::Vending, machineId, (char)VendingMachine::Start, sodaCost );
 
     nameServer.VMregister( this );
 }

@@ -100,12 +100,14 @@ void uMain::main()
         students.push_back(new Student(printer, server, office, i, params.maxPurchases));
     }
 
+    for (int i=0; i<params.numStudents; i++) {
+        delete students[i];
+    }
+
+    delete plant;
 
     for (int i=0; i<params.numVendingMachines; i++) {
         delete machines[i];
-    }
-    for (int i=0; i<params.numStudents; i++) {
-        delete students[i];
     }
 
 }
