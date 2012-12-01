@@ -1,6 +1,7 @@
 #include <uC++.h>
 #include "office.h"
 #include "MPRNG.h"
+#include "bank.h"
 
 extern MPRNG mprng;
 
@@ -22,7 +23,7 @@ WATCardOffice::~WATCardOffice ()
 void WATCardOffice::main()
 {
     for (int i=0; i<numCouriers; i++) {
-        Courier *c = new Courier(*this);
+        Courier *c = new Courier(*this, bank);
         couriers.push_back(c);
     }
 }
@@ -56,8 +57,9 @@ WATCardOffice::Job* WATCardOffice::requestWork()
 
 // WATCardOffice::Courier
 /*{{{*/
-    WATCardOffice::Courier::Courier(WATCardOffice& cardOffice)
-:office(cardOffice)
+WATCardOffice::Courier::Courier(WATCardOffice& cardOffice, Bank& bank) :
+    office(cardOffice),
+    bank(bank)
 {
 }
 
@@ -69,6 +71,7 @@ void WATCardOffice::Courier::main()
         // do work to transfer money
         WATCard *card = j->args.card == NULL ? new WATCard : j->args.card;
         // TODO communicate with bank
+        bank.withdraw(j->args.sid, j->args.amount);
 
         // 1 in 6 chance of losing the WATCard, thereby also losing the money on that 
         // card

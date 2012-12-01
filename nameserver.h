@@ -9,10 +9,10 @@ _Task NameServer {
     private:
         Printer &prt;
 
-        unsigned int registeredMachines;;
-        unsigned int numVendingMachines;
         unsigned int numStudents;
-        unsigned int nextRegisterId;
+        unsigned int numVendingMachines;
+        //unsigned int nextRegisterId;
+        unsigned int registeredMachines;
 
         VendingMachine** vendingMachines;
         unsigned int* assignedMachines;

@@ -25,12 +25,12 @@ _Task WATCardOffice {
       _Task Courier { // communicates with bank
          private:
             WATCardOffice  &office;
-
+            Bank            &bank;
             enum States { Start = 'S', StartTransfer = 't', CompleteTransfer = 'T', Finished = 'F' };
 
             void main();
          public:
-            Courier(WATCardOffice& watcardOffice);
+            Courier(WATCardOffice& watcardOffice, Bank &bank);
       };
 
       enum States { Start = 'S', CourierComplete = 'W', CreationComplete = 'C', TransferComplete = 'T', Finished = 'F' };

@@ -31,12 +31,6 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer,
     maxStockPerFlavour(maxStockPerFlavour),
     timeBetweenShipments(timeBetweenShipments)
 {
-    /*
-    numVendingMachines = numVendingMachines;
-    maxShippedPerFlavour = maxShippedPerFlavour;
-    maxStockPerFlavour = maxStockPerFlavour;
-    timeBetweenShipments = timeBetweenShipments;
-*/
     closingDown = false;
 
     prt.print( Printer::BottlingPlant, BottlingPlant::Start );
