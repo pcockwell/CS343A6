@@ -15,7 +15,7 @@ Parent::Parent(Printer& prt, Bank& bank, unsigned int numStudents, unsigned int 
 void Parent::main()
 {
     int count = 0;
-    while(count < 50){
+    while(true){
         _Accept( ~Parent ){
             break;
         } else {

@@ -19,6 +19,7 @@ WATCardOffice::~WATCardOffice ()
     for (int i=0; i<couriers.size(); i++) {
         delete couriers[i];
     }
+    cout << "couriers termindated" << endl;
     prt.print( Printer::WATCardOffice, (char)WATCardOffice::Finished );
 }
 
@@ -32,6 +33,12 @@ void WATCardOffice::main()
 
     while( true ){
         _Accept( ~WATCardOffice ){
+            for (int i=0; i<couriers.size(); i++) {
+                Args args = {0, 0, NULL, true};
+                Job *j = new Job(args);
+                jobs.push(j);
+                jobReady.signal();
+            }
             break;
         } or _Accept( create, transfer, requestWork ){
 
@@ -39,9 +46,11 @@ void WATCardOffice::main()
     }
 }
 
+
+
 FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
 {
-    Args args = {sid, amount, NULL};
+    Args args = {sid, amount, NULL, false};
     Job *j = new Job(args);
     jobs.push(j);
     jobReady.signal();
@@ -51,7 +60,7 @@ FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
 
 FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard *card )
 {
-    Args args = {sid, amount, card};
+    Args args = {sid, amount, card, false};
     Job *j = new Job(args);
     jobs.push(j);
     jobReady.signal();
@@ -86,11 +95,11 @@ void WATCardOffice::Courier::main()
 {
     for (;;) {
         Job *j = office.requestWork();
+        if (j->args.termination) break;
         prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::StartTransfer, j->args.sid, j->args.amount );
 
         // do work to transfer money
         WATCard *card = j->args.card == NULL ? new WATCard : j->args.card;
-        // TODO communicate with bank
         bank.withdraw(j->args.sid, j->args.amount);
         card->deposit(j->args.amount);
 
@@ -98,6 +107,7 @@ void WATCardOffice::Courier::main()
         // 1 in 6 chance of losing the WATCard, thereby also losing the money on that 
         // card
         if (mprng(6-1) == 0) {
+            delete j->args.card;
             j->result.exception(new WATCardOffice::Lost);
             continue;
         }
