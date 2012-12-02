@@ -29,10 +29,6 @@ void Truck::main()
             numBottlesInCargo += cargo[i];
         }
 
-        if ( numBottlesInCargo > 50 ){
-            break;
-        }
-
         prt.print( Printer::Truck, (char)Truck::Pickup, numBottlesInCargo - numBottlesBeforePickup );
 
         for ( unsigned int i = 0; i < numVendingMachines; i++ ){

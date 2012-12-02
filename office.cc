@@ -26,7 +26,7 @@ WATCardOffice::~WATCardOffice ()
 void WATCardOffice::main()
 {
     for (int i=0; i<numCouriers; i++) {
-        Courier *c = new Courier(*this, bank);
+        Courier *c = new Courier(prt, *this, bank, i);
         couriers.push_back(c);
     }
 }
@@ -63,23 +63,30 @@ WATCardOffice::Job* WATCardOffice::requestWork()
 
 // WATCardOffice::Courier
 /*{{{*/
-WATCardOffice::Courier::Courier(WATCardOffice& cardOffice, Bank& bank) :
-    office(cardOffice),
-    bank(bank)
+WATCardOffice::Courier::Courier(Printer &prt, WATCardOffice& cardOffice, Bank& bank, unsigned int id) :
+    prt(prt), office(cardOffice), bank(bank), id(id)
 {
+    prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::Start );
+}
+
+WATCardOffice::Courier::~Courier()
+{
+    prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::Finished );
 }
 
 void WATCardOffice::Courier::main()
 {
     for (;;) {
         Job *j = office.requestWork();
-        //prt.print( Printer::Courier, (char)WATCardOffice::Courier::StartTransfer, j->args.sid, j->args.amount );
+        prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::StartTransfer, j->args.sid, j->args.amount );
 
         // do work to transfer money
         WATCard *card = j->args.card == NULL ? new WATCard : j->args.card;
         // TODO communicate with bank
         bank.withdraw(j->args.sid, j->args.amount);
+        card->deposit(j->args.amount);
 
+        prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::CompleteTransfer, j->args.sid, j->args.amount );
         // 1 in 6 chance of losing the WATCard, thereby also losing the money on that 
         // card
         if (mprng(6-1) == 0) {
@@ -87,7 +94,6 @@ void WATCardOffice::Courier::main()
             continue;
         }
         j->result.delivery(card);
-        //prt.print( Printer::Courier, (char)WATCardOffice::Courier::CompleteTransfer, j->args.sid, j->args.amount );
     }
 }
 /*}}}*/

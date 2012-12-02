@@ -24,13 +24,18 @@ _Task WATCardOffice {
 
       _Task Courier { // communicates with bank
          private:
+            Printer        &prt;
             WATCardOffice  &office;
             Bank            &bank;
+
+            unsigned int id;
+
             enum States { Start = 'S', StartTransfer = 't', CompleteTransfer = 'T', Finished = 'F' };
 
             void main();
          public:
-            Courier(WATCardOffice& watcardOffice, Bank &bank);
+            Courier(Printer &prt, WATCardOffice& cardOffice, Bank& bank, unsigned int id);
+            ~Courier();
       };
 
       enum States { Start = 'S', CourierComplete = 'W', CreationComplete = 'C', TransferComplete = 'T', Finished = 'F' };

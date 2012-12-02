@@ -54,11 +54,10 @@ void Student::main()
             }
 
             if (status == VendingMachine::BUY) {
-                prt.print( Printer::Student, id, (char)Student::SodaBought, card.getBalance() );
+                prt.print( Printer::Student, id, (char)Student::SodaBought );
                 break;
             } else if (status == VendingMachine::STOCK) {
                 machine = nameServer.getMachine(id);
-
                 prt.print( Printer::Student, id, (char)Student::VendingMachine, machine->getId() );
             } else if (status == VendingMachine::FUNDS) {
                 card = office.transfer(id, machine->cost() + 5, card);
