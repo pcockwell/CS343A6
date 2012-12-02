@@ -54,7 +54,7 @@ void Student::main()
             }
 
             if (status == VendingMachine::BUY) {
-                prt.print( Printer::Student, id, (char)Student::SodaBought );
+                prt.print( Printer::Student, id, (char)Student::SodaBought, (*card()).getBalance() );
                 break;
             } else if (status == VendingMachine::STOCK) {
                 machine = nameServer.getMachine(id);
