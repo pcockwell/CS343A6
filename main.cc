@@ -85,17 +85,46 @@ void uMain::main()
     vector<VendingMachine *> machines;
     vector<Student *> students;
 
+    // Create in order:
     // printer, bank, parent, office, name server, vending machines, plant, 
-    // stduents
-    Printer printer(params.numStudents, params.numVendingMachines, params.numCouriers);
-    Bank bank(params.numStudents);
-    Parent parent(printer, bank, params.numStudents, params.parentalDelay);
-    WATCardOffice office(printer, bank, params.numCouriers);
-    NameServer server(printer, params.numVendingMachines, params.numStudents);
+    // students
+    Printer printer(
+            params.numStudents,
+            params.numVendingMachines,
+            params.numCouriers);
+
+    Bank    bank(params.numStudents);
+    Parent  parent(
+            printer,
+            bank,
+            params.numStudents,
+            params.parentalDelay);
+    WATCardOffice   office(
+                    printer,
+                    bank,
+                    params.numCouriers);
+    NameServer      server(
+                    printer,
+                    params.numVendingMachines,
+                    params.numStudents);
+
     for (int i=0; i<params.numVendingMachines; i++) {
-        machines.push_back(new VendingMachine(printer, server, i, params.sodaCost, params.maxStockPerFlavour));
+        machines.push_back(new VendingMachine(
+                                printer,
+                                server,
+                                i,
+                                params.sodaCost,
+                                params.maxStockPerFlavour));
     }
-    BottlingPlant *plant = new BottlingPlant(printer, server, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
+
+    BottlingPlant *plant = new BottlingPlant(
+                                printer,
+                                server,
+                                params.numVendingMachines,
+                                params.maxShippedPerFlavour,
+                                params.maxStockPerFlavour,
+                                params.timeBetweenShipments);
+
     for (int i=0; i<params.numStudents; i++) {
         students.push_back(new Student(printer, server, office, i, params.maxPurchases));
     }
