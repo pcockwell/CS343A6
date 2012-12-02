@@ -29,6 +29,14 @@ void WATCardOffice::main()
         Courier *c = new Courier(prt, *this, bank, i);
         couriers.push_back(c);
     }
+
+    while( true ){
+        _Accept( ~WATCardOffice ){
+            break;
+        } or _Accept( create, transfer, requestWork ){
+
+        }
+    }
 }
 
 FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
