@@ -19,7 +19,6 @@ WATCardOffice::~WATCardOffice ()
     for (int i=0; i<couriers.size(); i++) {
         delete couriers[i];
     }
-    cout << "couriers termindated" << endl;
     prt.print( Printer::WATCardOffice, (char)WATCardOffice::Finished );
 }
 
@@ -71,8 +70,10 @@ FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard
 WATCardOffice::Job* WATCardOffice::requestWork()
 {
     if (jobs.size() == 0) jobReady.wait();
-    prt.print( Printer::WATCardOffice, (char)WATCardOffice::CourierComplete );
     Job *j = jobs.front();
+    if ( !j->args.termination ) {
+        prt.print( Printer::WATCardOffice, (char)WATCardOffice::CourierComplete );
+    }
     jobs.pop();
     return j;
 }
