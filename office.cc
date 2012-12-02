@@ -19,6 +19,11 @@ WATCardOffice::~WATCardOffice ()
     for (int i=0; i<couriers.size(); i++) {
         delete couriers[i];
     }
+    while( jobs.size() != 0 ){
+        Job *j = jobs.front();
+        jobs.pop();
+        delete j;
+    }
     prt.print( Printer::WATCardOffice, (char)WATCardOffice::Finished );
 }
 
@@ -96,7 +101,10 @@ void WATCardOffice::Courier::main()
 {
     for (;;) {
         Job *j = office.requestWork();
-        if (j->args.termination) break;
+        if (j->args.termination) {
+            delete j;
+            break;
+        }
         prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::StartTransfer, j->args.sid, j->args.amount );
 
         // do work to transfer money
@@ -113,6 +121,7 @@ void WATCardOffice::Courier::main()
             continue;
         }
         j->result.delivery(card);
+        delete j;
     }
 }
 /*}}}*/
