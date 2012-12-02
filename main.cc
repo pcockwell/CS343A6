@@ -78,6 +78,7 @@ void uMain::main()
     }
     delete fin;
 
+    mprng.seed(seed);
     // reading config
     ConfigParms params;
     processConfigFile(config_file.c_str(), params);

@@ -54,7 +54,7 @@ void WATCardOffice::main()
 
 FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
 {
-    Args args = {sid, amount, NULL, false};
+    Args args = {sid, amount, new WATCard, false};
     Job *j = new Job(args);
     jobs.push(j);
     jobReady.signal();
@@ -108,7 +108,7 @@ void WATCardOffice::Courier::main()
         prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::StartTransfer, j->args.sid, j->args.amount );
 
         // do work to transfer money
-        WATCard *card = j->args.card == NULL ? new WATCard : j->args.card;
+        WATCard *card = j->args.card;
         bank.withdraw(j->args.sid, j->args.amount);
         card->deposit(j->args.amount);
 
@@ -118,6 +118,7 @@ void WATCardOffice::Courier::main()
         if (mprng(6-1) == 0) {
             delete j->args.card;
             j->result.exception(new WATCardOffice::Lost);
+            delete j;
             continue;
         }
         j->result.delivery(card);

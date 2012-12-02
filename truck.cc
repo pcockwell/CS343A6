@@ -37,7 +37,7 @@ void Truck::main()
                 break;
             }
 
-            prt.print( Printer::Truck, (char)Truck::BeginDelivery, numBottlesInCargo );
+            prt.print( Printer::Truck, (char)Truck::BeginDelivery, vendingMachines[i]->getId(), numBottlesInCargo );
 
             unsigned int *machineInventory = vendingMachines[i]->inventory();
             unsigned int inventoryCount = 0;
@@ -57,10 +57,10 @@ void Truck::main()
             }
 
             if ( inventoryCount != numFlavours * maxStockPerFlavour ){
-                prt.print( Printer::Truck, (char)Truck::UnsuccessfulFill, inventoryCount - ( numFlavours * maxStockPerFlavour ) );
+                prt.print( Printer::Truck, (char)Truck::UnsuccessfulFill, vendingMachines[i]->getId(), ( numFlavours * maxStockPerFlavour ) - inventoryCount );
             }
 
-            prt.print( Printer::Truck, (char)Truck::EndDelivery, numBottlesInCargo );
+            prt.print( Printer::Truck, (char)Truck::EndDelivery, vendingMachines[i]->getId(), numBottlesInCargo );
 
             vendingMachines[i]->restocked();
         }
