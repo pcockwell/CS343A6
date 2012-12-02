@@ -15,8 +15,8 @@ void BottlingPlant::main()
             break;
         } or _Accept( getShipment ){
             prt.print( Printer::BottlingPlant, BottlingPlant::Pickup );
-            makeProductionRun();
             yield(timeBetweenShipments);
+            makeProductionRun();
         }
     }
 
@@ -49,7 +49,6 @@ bool BottlingPlant::getShipment( unsigned int cargo[] )
         }
     }
 
-    prt.print( Printer::BottlingPlant, (char)BottlingPlant::Pickup );
     return closingDown;
 }
 
