@@ -24,6 +24,8 @@ _Monitor Printer {
         unsigned int numCouriers;
         unsigned int numMembers;
 
+        bool userStateChanged;
+
         struct OutputState{
             OutputState() : state(""), val1(-1), val2(-1){};
 

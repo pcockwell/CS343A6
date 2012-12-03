@@ -16,6 +16,7 @@ Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, uns
     //Total number of members is the number of students + number of machines
     // + number of couriers + the Parent, WATOffice, Nameserver, Truck, and Plant
     numMembers = numStudents + numVendingMachines + numCouriers + 5;
+    userStateChanged = false;
 
     //Create the states array
     userStates = new OutputState*[numMembers];
@@ -100,6 +101,10 @@ Printer::~Printer(){
 //---------------------------------------------------------------------------------------
 void Printer::flush(){
 
+    if ( !userStateChanged ){
+        return;
+    }
+
     for ( unsigned int i = 0; i < numMembers; i++ ){
 
         cout << ( userStates[i]->state == "" ? "" : userStates[i]->state );
@@ -116,6 +121,8 @@ void Printer::flush(){
         userStates[i]->val2 = -1;
     }
     cout << endl;
+
+    userStateChanged = false;
 }
 
 void Printer::print( Kind kind, char state ){
@@ -145,6 +152,8 @@ void Printer::print( Kind kind, char state ){
     }
 
     userStates[memberId]->state += state;
+
+    userStateChanged = true;
 
     if ( state == 'F' ){
         for ( unsigned int i = 0; i < numMembers; i++ ){
@@ -184,6 +193,8 @@ void Printer::print( Kind kind, char state, int value1 ){
 
     userStates[memberId]->state += state;
     userStates[memberId]->val1 = value1;
+
+    userStateChanged = true;
 }
 
 void Printer::print( Kind kind, char state, int value1, int value2 ){
@@ -215,6 +226,8 @@ void Printer::print( Kind kind, char state, int value1, int value2 ){
     userStates[memberId]->state += state;
     userStates[memberId]->val1 = value1;
     userStates[memberId]->val2 = value2;
+
+    userStateChanged = true;
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state ){
@@ -238,6 +251,8 @@ void Printer::print( Kind kind, unsigned int lid, char state ){
     }
 
     userStates[memberId]->state += state;
+
+    userStateChanged = true;
 
     if ( state == 'F' ){
         for ( unsigned int i = 0; i < numMembers; i++ ){
@@ -271,6 +286,8 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 ){
 
     userStates[memberId]->state += state;
     userStates[memberId]->val1 = value1;
+
+    userStateChanged = true;
 }
 void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 ){   
 
@@ -295,4 +312,6 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1, int va
     userStates[memberId]->state += state;
     userStates[memberId]->val1 = value1;
     userStates[memberId]->val2 = value2;
+
+    userStateChanged = true;
 }
