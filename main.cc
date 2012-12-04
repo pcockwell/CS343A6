@@ -20,7 +20,6 @@
 #include "truck.h"
 #include "printer.h"
 
-
 using namespace std;
 
 MPRNG mprng;  // random number generator
@@ -78,8 +77,10 @@ void uMain::main()
     }
     delete fin;
 
+    // Seed MPRNG
     mprng.seed(seed);
-    // reading config
+
+    // reading config parameters
     ConfigParms params;
     processConfigFile(config_file.c_str(), params);
 
@@ -130,12 +131,15 @@ void uMain::main()
         students.push_back(new Student(printer, server, office, i, params.maxPurchases));
     }
 
+    // Wait for students to finish first
     for (int i=0; i<params.numStudents; i++) {
         delete students[i];
     }
 
+    // Then wait for plant to finish
     delete plant;
 
+    // Finally delete vending machines
     for (int i=0; i<params.numVendingMachines; i++) {
         delete machines[i];
     }

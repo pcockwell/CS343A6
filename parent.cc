@@ -12,9 +12,13 @@ Parent::Parent(Printer& prt, Bank& bank, unsigned int numStudents, unsigned int 
     prt.print(Printer::Parent, (char)Parent::Start);
 }
 
+Parent::~Parent()
+{
+    prt.print(Printer::Parent, (char)Parent::Finished);
+}
+
 void Parent::main()
 {
-    int count = 0;
     while(true){
         _Accept( ~Parent ){
             break;
@@ -26,9 +30,7 @@ void Parent::main()
 
             prt.print(Printer::Parent, (char)Parent::Deposit, studentId, amount);
             bank.deposit(studentId, amount);
-            count++;
         }
     }
 
-    prt.print(Printer::Parent, (char)Parent::Finished);
 }

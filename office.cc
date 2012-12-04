@@ -8,17 +8,21 @@ extern MPRNG mprng;
 
 // WATCardOffice
 /*{{{*/
+// Constructor
 WATCardOffice::WATCardOffice( Printer &prt, Bank &bank, unsigned int numCouriers ) :
     prt(prt), bank(bank), numCouriers(numCouriers)
 {
     prt.print( Printer::WATCardOffice, (char)WATCardOffice::Start );
 }
 
+// Destructor
 WATCardOffice::~WATCardOffice ()
 {
+    // wait for couriers to finish
     for (int i=0; i<couriers.size(); i++) {
         delete couriers[i];
     }
+    // free any remaining jobs
     while( jobs.size() != 0 ){
         Job *j = jobs.front();
         jobs.pop();
@@ -27,15 +31,17 @@ WATCardOffice::~WATCardOffice ()
     prt.print( Printer::WATCardOffice, (char)WATCardOffice::Finished );
 }
 
-// Create <numCouriers> couriers
 void WATCardOffice::main()
 {
+    // Creates <numCouriers> couriers
     for (int i=0; i<numCouriers; i++) {
         Courier *c = new Courier(prt, *this, bank, i);
         couriers.push_back(c);
     }
 
-    while( true ){
+    while( true ) {
+        // If office is to terminate, send "terminating" jobs to couriers to 
+        // terminate them first
         _Accept( ~WATCardOffice ){
             for (int i=0; i<couriers.size(); i++) {
                 Args args = {0, 0, NULL, true};
@@ -44,7 +50,7 @@ void WATCardOffice::main()
                 jobReady.signal();
             }
             break;
-        } or _Accept( create, transfer, requestWork ){
+        } or _Accept( create, transfer, requestWork ) {
 
         }
     }

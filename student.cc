@@ -41,6 +41,7 @@ void Student::main()
             yield(mprng(1, 10));
 
             // attempt to buy, deference future
+            // loop if watcard is lost
             VendingMachine::Status status;
             for (;;) {
                 try {
@@ -53,19 +54,32 @@ void Student::main()
                 }
             }
 
+            // Purchase succeeded
             if (status == VendingMachine::BUY) {
-                prt.print( Printer::Student, id, (char)Student::SodaBought, (*card()).getBalance() );
+                prt.print( Printer::Student,
+                            id,
+                            (char)Student::SodaBought,
+                            (*card()).getBalance() );
                 break;
             } else if (status == VendingMachine::STOCK) {
+                // This flavour is out of stock
+                // try another vending machine
                 machine = nameServer.getMachine(id);
-                prt.print( Printer::Student, id, (char)Student::VendingMachine, machine->getId() );
+                prt.print( Printer::Student,
+                            id,
+                            (char)Student::VendingMachine,
+                            machine->getId() );
             } else if (status == VendingMachine::FUNDS) {
+                // Not enough balance on the watcard
+                // so transfer some money
                 card = office.transfer(id, machine->cost() + 5, card);
             } else {
+                // Unknown status
                 exit(EXIT_FAILURE);
             }
         }
     }
+    // student responsible for deleting watcard if it is not lost
     delete card;
     prt.print( Printer::Student, id, (char)Student::Finished );
 }
