@@ -20,6 +20,7 @@ _Task BottlingPlant {
 
         const static unsigned int numFlavours = 4;
 
+        // current stock level as produced by a production run
         int curStock[numFlavours];
 
         enum States { Start = 'S', Generating = 'G', Pickup = 'P', Finished = 'F' };
