@@ -60,44 +60,68 @@ void WATCardOffice::main()
 
 FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
 {
+    // Prepare arguments
     Args args = {sid, amount, new WATCard, false};
+
+    // Create new job
     Job *j = new Job(args);
     jobs.push(j);
+
+    // Signal couriers
     jobReady.signal();
     prt.print( Printer::WATCardOffice, (char)WATCardOffice::CreationComplete, sid, amount );
+
+    // Return future
     return j->result;
 }
 
 FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard *card )
 {
+    // Prepare arguments
     Args args = {sid, amount, card, false};
+
+    // Create new job
     Job *j = new Job(args);
     jobs.push(j);
+
+    // Signal couriers
     jobReady.signal();
     prt.print( Printer::WATCardOffice, (char)WATCardOffice::TransferComplete, sid, amount );
+
+    // Return future
     return j->result;
 }
 
 WATCardOffice::Job* WATCardOffice::requestWork()
 {
+    // If no job available, wait
     if (jobs.size() == 0) jobReady.wait();
+
+    // Grab a job
     Job *j = jobs.front();
     if ( !j->args.termination ) {
         prt.print( Printer::WATCardOffice, (char)WATCardOffice::CourierComplete );
     }
     jobs.pop();
+
+    // Courier responsible for deleting this job
     return j;
 }
 /*}}}*/
 
 // WATCardOffice::Courier
 /*{{{*/
-WATCardOffice::Courier::Courier(Printer &prt, WATCardOffice& cardOffice, Bank& bank, unsigned int id) :
+// Constructor
+WATCardOffice::Courier::Courier(Printer &prt,
+                                WATCardOffice& cardOffice,
+                                Bank& bank,
+                                unsigned int id) :
     prt(prt), office(cardOffice), bank(bank), id(id)
 {
     prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::Start );
 }
 
+// Destructor
 WATCardOffice::Courier::~Courier()
 {
     prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::Finished );
@@ -106,27 +130,34 @@ WATCardOffice::Courier::~Courier()
 void WATCardOffice::Courier::main()
 {
     for (;;) {
+        // Grab a job, if it's a terminating job, stop
         Job *j = office.requestWork();
         if (j->args.termination) {
             delete j;
             break;
         }
-        prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::StartTransfer, j->args.sid, j->args.amount );
+        prt.print( Printer::Courier, id,
+                (char)WATCardOffice::Courier::StartTransfer,
+                j->args.sid, j->args.amount );
 
-        // do work to transfer money
+        // communicate with bank to transfer money
         WATCard *card = j->args.card;
         bank.withdraw(j->args.sid, j->args.amount);
         card->deposit(j->args.amount);
 
-        prt.print( Printer::Courier, id, (char)WATCardOffice::Courier::CompleteTransfer, j->args.sid, j->args.amount );
+        prt.print( Printer::Courier, id,
+                (char)WATCardOffice::Courier::CompleteTransfer,
+                j->args.sid, j->args.amount );
+
         // 1 in 6 chance of losing the WATCard, thereby also losing the money on that 
-        // card
+        // card, raising an exception
         if (mprng(6-1) == 0) {
             delete j->args.card;
             j->result.exception(new WATCardOffice::Lost);
             delete j;
             continue;
         }
+        // insert result into uFuture
         j->result.delivery(card);
         delete j;
     }

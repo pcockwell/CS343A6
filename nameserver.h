@@ -9,10 +9,9 @@ _Task NameServer {
     private:
         Printer &prt;
 
-        unsigned int numStudents;
-        unsigned int numVendingMachines;
-        //unsigned int nextRegisterId;
-        unsigned int registeredMachines;
+        unsigned int numStudents;       // number of students
+        unsigned int numVendingMachines;// number of vmachines
+        unsigned int registeredMachines;// number of vmachines that has registered
 
         VendingMachine** vendingMachines;
         unsigned int* assignedMachines;
@@ -21,7 +20,9 @@ _Task NameServer {
 
         void main();
     public:
-        NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents );
+        NameServer( Printer &prt,
+                    unsigned int numVendingMachines,
+                    unsigned int numStudents );
         ~NameServer();
 
         void VMregister( VendingMachine *vendingmachine );

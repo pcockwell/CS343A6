@@ -5,8 +5,8 @@ _Monitor Bank {
     private:
         unsigned int numStudents;
 
-        uCondition* funds;
-        unsigned int* accountBalances;
+        uCondition* funds;  // a condition for each student account
+        unsigned int* accountBalances;  // a list of balances
     public:
         Bank( unsigned int numStudents );
         ~Bank();

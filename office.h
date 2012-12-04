@@ -11,15 +11,15 @@ _Monitor Bank;
 _Task WATCardOffice {
     private:
         struct Args {
-            unsigned int   sid;
-            unsigned int   amount;
-            WATCard        *card;
-            bool            termination;
+            unsigned int   sid;     // student id
+            unsigned int   amount;  // amount to deposit/transfer
+            WATCard        *card;   // which watcard?
+            bool        termination;// special flag to terminate courier
         };
 
-        struct Job {				// marshalled arguments and return future
-            Args     args;				// call arguments (YOU DEFINE "Args")
-            FWATCard result;			// return future
+        struct Job {
+            Args     args;
+            FWATCard result;
             Job( Args args ) : args( args ) {}
         };
 
@@ -47,10 +47,10 @@ _Task WATCardOffice {
         Bank&          bank;
         unsigned int   numCouriers;
 
-        uCondition        jobReady;
-        std::queue<Job *> jobs;
+        uCondition        jobReady; // courier wait for jobs to become available
+        std::queue<Job *> jobs;     // queue of jobs
 
-        std::vector<Courier *> couriers;
+        std::vector<Courier *> couriers;    // fixed size pool of couriers
 
     public:
         _Event Lost {};

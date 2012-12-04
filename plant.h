@@ -16,7 +16,7 @@ _Task BottlingPlant {
         unsigned int maxStockPerFlavour;
         unsigned int timeBetweenShipments;
 
-        bool closingDown;
+        bool closingDown;   // flag to indicate plant is terminating
 
         const static unsigned int numFlavours = 4;
 
@@ -27,9 +27,12 @@ _Task BottlingPlant {
         void main();
         void makeProductionRun();
     public:
-        BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,
-                unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
-                unsigned int timeBetweenShipments );
+        BottlingPlant( Printer &prt,
+                        NameServer &nameServer,
+                        unsigned int numVendingMachines,
+                        unsigned int maxShippedPerFlavour,
+                        unsigned int maxStockPerFlavour,
+                        unsigned int timeBetweenShipments );
         ~BottlingPlant();
         bool getShipment( unsigned int cargo[] );
 };

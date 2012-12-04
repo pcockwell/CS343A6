@@ -264,8 +264,8 @@ void Printer::print( Kind kind, unsigned int lid, char state ){
     }
 }
 
-void Printer::print( Kind kind, unsigned int lid, char state, int value1 ){
-
+void Printer::print( Kind kind, unsigned int lid, char state, int value1 ) 
+{
     int memberId;
 
     switch(kind){
@@ -289,11 +289,11 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 ){
 
     userStateChanged = true;
 }
-void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 ){   
-
+void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 )
+{
     int memberId;
 
-    switch(kind){
+    switch (kind) {
         case Student:
             memberId = 5 + lid;
             break;

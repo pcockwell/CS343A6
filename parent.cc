@@ -6,12 +6,17 @@
 
 extern MPRNG mprng;
 
-Parent::Parent(Printer& prt, Bank& bank, unsigned int numStudents, unsigned int parentalDelay) :
+// Constructor
+Parent::Parent( Printer& prt,
+                Bank& bank,
+                unsigned int numStudents,
+                unsigned int parentalDelay) :
     prt(prt), bank(bank), numStudents(numStudents), parentalDelay(parentalDelay)
 {
     prt.print(Printer::Parent, (char)Parent::Start);
 }
 
+// Destructor
 Parent::~Parent()
 {
     prt.print(Printer::Parent, (char)Parent::Finished);
@@ -19,12 +24,13 @@ Parent::~Parent()
 
 void Parent::main()
 {
-    while(true){
-        _Accept( ~Parent ){
+    while(true) {
+        _Accept( ~Parent ) {    // Allow parent to terminate
             break;
         } else {
             yield(parentalDelay);
 
+            // Randomly select a student and deposit randomly [1, 3] dollars
             unsigned int studentId = mprng(0, numStudents - 1);
             unsigned int amount = mprng(1, 3);
 
