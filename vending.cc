@@ -10,8 +10,11 @@ VendingMachine::VendingMachine( Printer &prt,
                                 unsigned int id,
                                 unsigned int sodaCost,
                                 unsigned int maxStockPerFlavour ) :
-    prt(prt), nameServer(nameServer), machineId(id),
-    sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour)
+    prt(prt),
+    nameServer(nameServer),
+    machineId(id),
+    sodaCost(sodaCost),
+    maxStockPerFlavour(maxStockPerFlavour)
 {
     for (unsigned int i = 0; i < numFlavours; i++){
         inventories[i] = 0;

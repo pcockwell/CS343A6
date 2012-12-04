@@ -14,7 +14,8 @@ BottlingPlant::BottlingPlant( Printer &prt,
                                 unsigned int maxShippedPerFlavour,
                                 unsigned int maxStockPerFlavour,
                                 unsigned int timeBetweenShipments ) :
-    prt(prt), nameServer(nameServer),
+    prt(prt),
+    nameServer(nameServer),
     numVendingMachines(numVendingMachines),
     maxShippedPerFlavour(maxShippedPerFlavour),
     maxStockPerFlavour(maxStockPerFlavour),
@@ -67,9 +68,9 @@ bool BottlingPlant::getShipment( unsigned int cargo[] )
     return closingDown;
 }
 
+// randomly produce some number of soda of each flavour
 void BottlingPlant::makeProductionRun() {
     int numGenerated = 0;
-    // randomly produce some soda of each flavour
     for ( unsigned int i = 0; i < numFlavours; i++ ) {
         curStock[i] = mprng(0, maxShippedPerFlavour);
         numGenerated += curStock[i];

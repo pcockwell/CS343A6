@@ -56,8 +56,7 @@ void WATCardOffice::main()
     }
 }
 
-
-
+// Creates a new watcard with a specified balance for a student
 FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
 {
     // Prepare arguments
@@ -75,6 +74,7 @@ FWATCard WATCardOffice::create( unsigned int sid, unsigned int amount )
     return j->result;
 }
 
+// Transfer a specified amount from a student's bank account to his watcard
 FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard *card )
 {
     // Prepare arguments
@@ -92,6 +92,7 @@ FWATCard WATCardOffice::transfer( unsigned int sid, unsigned int amount, WATCard
     return j->result;
 }
 
+// Courier calls to request a job
 WATCardOffice::Job* WATCardOffice::requestWork()
 {
     // If no job available, wait
