@@ -145,6 +145,8 @@ void Printer::print( Kind kind, char state ){
         case BottlingPlant:
             memberId = 4;
             break;
+        default:
+            exit(EXIT_FAILURE);
     }
 
     if ( state == 'F' || userStates[memberId]->state != "" ){
@@ -185,6 +187,8 @@ void Printer::print( Kind kind, char state, int value1 ){
         case BottlingPlant:
             memberId = 4;
             break;
+        default:
+            exit(EXIT_FAILURE);
     }
 
     if ( userStates[memberId]->state != "" ){
@@ -217,6 +221,8 @@ void Printer::print( Kind kind, char state, int value1, int value2 ){
         case BottlingPlant:
             memberId = 4;
             break;
+        default:
+            exit(EXIT_FAILURE);
     }
 
     if ( userStates[memberId]->state != "" ){
@@ -244,6 +250,8 @@ void Printer::print( Kind kind, unsigned int lid, char state ){
         case Courier:
             memberId = 5 + numStudents + numVendingMachines + lid;
             break;
+        default:
+            exit(EXIT_FAILURE);
     }
 
     if ( state == 'F' || userStates[memberId]->state != "" ){
@@ -278,6 +286,8 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 )
         case Courier:
             memberId = 5 + numStudents + numVendingMachines + lid;
             break;
+        default:
+            exit(EXIT_FAILURE);
     }
 
     if ( userStates[memberId]->state != "" ){
@@ -289,6 +299,7 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 )
 
     userStateChanged = true;
 }
+
 void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 )
 {
     int memberId;
@@ -303,6 +314,8 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1, int va
         case Courier:
             memberId = 5 + numStudents + numVendingMachines + lid;
             break;
+        default:
+            exit(EXIT_FAILURE);
     }
 
     if ( userStates[memberId]->state != "" ){
