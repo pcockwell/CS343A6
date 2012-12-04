@@ -2,7 +2,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -56,26 +55,17 @@ void uMain::main()
 {
     string config_file("soda.config");
     unsigned int seed = (unsigned int)getpid();
-    ifstream *fin;
 
-    switch(argc)
-    {
+    switch(argc) {
         case 3:
             if (!convert(seed, argv[2]) || seed == 0) print_usage(argv[0]);
         case 2:
             config_file = argv[1];
         case 1:
-            try {
-                fin = new ifstream(config_file.c_str(), ifstream::in);
-            } catch (uFile::Failure) {
-                cerr << "Error! could not open input file \"" << config_file << "\"" << endl;
-                exit(EXIT_FAILURE);
-            }
             break;
         default:
             print_usage(argv[0]);
     }
-    delete fin;
 
     // Seed MPRNG
     mprng.seed(seed);

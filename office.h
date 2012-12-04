@@ -30,16 +30,25 @@ _Task WATCardOffice {
                 Bank            &bank;
 
                 unsigned int id;
-
-                enum States { Start = 'S', StartTransfer = 't', CompleteTransfer = 'T', Finished = 'F' };
+                enum States { Start = 'S',
+                                StartTransfer = 't',
+                                CompleteTransfer = 'T',
+                                Finished = 'F' };
 
                 void main();
             public:
-                Courier(Printer &prt, WATCardOffice& cardOffice, Bank& bank, unsigned int id);
+                Courier(Printer &prt,
+                        WATCardOffice& cardOffice,
+                        Bank& bank,
+                        unsigned int id);
                 ~Courier();
         };
 
-        enum States { Start = 'S', CourierComplete = 'W', CreationComplete = 'C', TransferComplete = 'T', Finished = 'F' };
+        enum States { Start = 'S',
+                        CourierComplete = 'W',
+                        CreationComplete = 'C',
+                        TransferComplete = 'T',
+                        Finished = 'F' };
 
         void main();
 

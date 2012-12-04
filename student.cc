@@ -9,9 +9,17 @@
 
 extern MPRNG mprng;
 
-Student::Student( Printer &prt, NameServer &nameServer, WATCardOffice 
-        &cardOffice, unsigned int id, unsigned int maxPurchases )
-: prt(prt), nameServer(nameServer), office(cardOffice), id(id), maxPurchases(maxPurchases)
+// Constructor
+Student::Student( Printer &prt,
+                    NameServer &nameServer,
+                    WATCardOffice &cardOffice,
+                    unsigned int id,
+                    unsigned int maxPurchases ) :
+    prt(prt),
+    nameServer(nameServer),
+    office(cardOffice),
+    id(id),
+    maxPurchases(maxPurchases)
 {
 }
 
