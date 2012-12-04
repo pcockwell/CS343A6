@@ -12,7 +12,46 @@ ALGORITHM TESTING
   TEST 1:
   -------
     DATA DESCRIPTION
-    The first tewst is just the program execution with no parameters passed:
+    The first test is a series of incorrect inputs to test the validation. The 
+    tests performed are:
+
+       1 ./soda 34 343
+       2 ./soda soda.config -3
+       3 ./soda soda.config dfdf
+       4 ./soda asdfdf 343
+
+    These cases, in order above, test having a numerical value for config file, 
+    having the seed be invalid as a negative value, having the seed be invalid 
+    as a string, and passing a string that does not correspond to a file as the
+    config value.
+
+    TESTING
+    Here is the script-fixed log of the testing performed with line numbers
+    attached.
+
+       1 Script started on Mon 03 Dec 2012 07:27:52 PM EST
+       2 1%>linux028:~/cs343/a6> ./soda 34 343
+       3 Error! could not open input file "34"
+       4 1%>linux028:~/cs343/a6> ./soda soda.config -3
+       5 Usage: ./soda [ config-file [ random-seed (> 0) ] ]
+       6 1%>linux028:~/cs343/a6> ./soda soda.config dfdf
+       7 Usage: ./soda [ config-file [ random-seed (> 0) ] ]
+       8 1%>linux028:~/cs343/a6> ./soda asdfdf 343
+       9 Error! could not open input file "asdfdf"
+      10 1%>linux028:~/cs343/a6> exit
+      11 exit
+      12 
+      13 Script done on Mon 03 Dec 2012 07:28:43 PM EST
+
+    ANALYSIS
+    The results from running the program with invalid command line parameters show that:
+    1)  The system provides error and usage messages where appropriate
+    2)  The system does not execute when given invalid parameters
+
+  TEST 2:
+  -------
+    DATA DESCRIPTION
+    The second test is just the program execution with no parameters passed:
 
        1 ./soda
 
@@ -30,212 +69,116 @@ ALGORITHM TESTING
        7                                 #    plant per production run
        8 TimeBetweenShipments       5    # length of time between shipment pickup
        9 ParentalDelay              20    # length of time between new deposits of funds
-      10 NumCouriers                3    # maximum number of couriers in the pool
+      10 NumCouriers                2    # maximum number of couriers in the pool
 
     TESTING
     Here is the script-fixed log of the testing performed with line numbers
-    attached.
+    attached. Please note that in order to save space, a large amount of
+    lines have been removed. This is shown by a blank line skip, and an 
+    increase in the line numbers.
 
-       1 Script started on Mon 19 Nov 2012 09:33:39 PM EST
-       2 1%>linux028:~/cs343/A5> make vote TYPE=EXT
-       3 rm -f ImplType
-       4 touch q1tallyVotes.h
-       5 make vote TYPE="EXT"
-       6 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-       7 echo "IMPLTYPE=EXT" > ImplType
-       8 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-       9 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-      10 u++                                      -g -Wall -Wno-unused-label -MMD -DIMPLTYPE_EXT   -c -o q1.o q1.cc
-      11 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-      12 u++                                      q1.o -o vote
-      13 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-      14 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-      15 1%>linux028:~/cs343/A5> ./vote
-      16 Voter0  Voter1  Voter2  Voter3  Voter4  Voter5  
-      17 ======= ======= ======= ======= ======= ======= 
-      18 S       S       S                   
-      19         V 0             
-      20 V 0             B 1     S       S       S   
-      21 B 2                                     V 0 
-      22                                         C   
-      23 ...     ...     ...     ...     ...     F 0 
-      24 U 1                     
-      25 F 0     ...     ...     ...     ...     ... 
-      26                 U 0             
-      27 ...     ...     F 0     ...     ...     ... 
-      28         V 1                 
-      29         B 1             V 0         
-      30                         B 2     V 0     
-      31                                 C       
-      32 ...     ...     ...     ...     F 0     ...     
-      33                         U 1         
-      34 ...     ...     ...     F 0     ...     ...     
-      35         U 0                 
-      36 ...     F 0     ...     ...     ...     ...     
-      37 =================
-      38 All tours started
-      39 1%>linux028:~/cs343/A5> ./votemake vote TYPE=INT
-      40 rm -f ImplType
-      41 touch q1tallyVotes.h
-      42 make vote TYPE="INT"
-      43 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-      44 echo "IMPLTYPE=INT" > ImplType
-      45 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-      46 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-      47 u++                                      -g -Wall -Wno-unused-label -MMD -DIMPLTYPE_INT   -c -o q1.o q1.cc
-      48 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-      49 u++                                      q1.o -o vote
-      50 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-      51 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-      52 1%>linux028:~/cs343/A5> make vote TYPE=INT./vote
-      53 Voter0  Voter1  Voter2  Voter3  Voter4  Voter5  
-      54 ======= ======= ======= ======= ======= ======= 
-      55 S       S       S       S       S       S   
-      56         V 0                 
-      57         B 1                     V 0     
-      58 V 0                             B 2     
-      59 C                       
-      60 F 0     ...     ...     ...     ...     ...     
-      61         U 1                 
-      62 ...     F 0     ...     ...     ...     ...     
-      63                                 U 0     
-      64 ...     ...     ...     ...     F 0     ...     
-      65                         V 1         
-      66                         B 1             V 0 
-      67                 V 1                     B 2 
-      68                 C               
-      69 ...     ...     F 1     ...     ...     ...     
-      70                         U 1         
-      71 ...     ...     ...     F 1     ...     ...     
-      72                                         U 0 
-      73 ...     ...     ...     ...     ...     F 1 
-      74 =================
-      75 All tours started
-      76 1%>linux028:~/cs343/A5> ./votemake vote TYPE=AUTO
-      77 rm -f ImplType
-      78 touch q1tallyVotes.h
-      79 make vote TYPE="AUTO"
-      80 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-      81 echo "IMPLTYPE=AUTO" > ImplType
-      82 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-      83 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-      84 u++                                      -g -Wall -Wno-unused-label -MMD -DIMPLTYPE_AUTO   -c -o q1.o q1.cc
-      85 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-      86 u++                                      q1.o -o vote
-      87 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-      88 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-      89 1%>linux028:~/cs343/A5> make vote TYPE=AUTO./vote
-      90 Voter0  Voter1  Voter2  Voter3  Voter4  Voter5  
-      91 ======= ======= ======= ======= ======= ======= 
-      92 S       S       S       S           
-      93                         V 0         
-      94         V 0             B 1     S       S   
-      95 V 1     B 2                 
-      96 C                       
-      97 F 0     ...     ...     ...     ...     ...     
-      98         U 1                 
-      99 ...     F 0     ...     ...     ...     ...     
-     100                         U 0         
-     101 ...     ...     ...     F 0     ...     ...     
-     102                 V 0             
-     103                 B 1                     V 1 
-     104                                 V 0     B 2 
-     105                                 C       
-     106 ...     ...     ...     ...     F 0     ...     
-     107                                         U 1 
-     108 ...     ...     ...     ...     ...     F 0 
-     109                 U 0             
-     110 ...     ...     F 0     ...     ...     ...     
-     111 =================
-     112 All tours started
-     113 1%>linux028:~/cs343/A5> ./votemake vote TYPE=LOCK
-     114 rm -f ImplType
-     115 touch q1tallyVotes.h
-     116 make vote TYPE="LOCK"
-     117 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-     118 echo "IMPLTYPE=LOCK" > ImplType
-     119 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-     120 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-     121 u++                                      -g -Wall -Wno-unused-label -MMD -DIMPLTYPE_LOCK   -c -o q1.o q1.cc
-     122 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-     123 u++                                      q1.o -o vote
-     124 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-     125 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-     126 1%>linux028:~/cs343/A5> make vote TYPE=LOCK./vote
-     127 Voter0  Voter1  Voter2  Voter3  Voter4  Voter5  
-     128 ======= ======= ======= ======= ======= ======= 
-     129 S       S       S       S       S       S   
-     130         V 1                 
-     131         B 1     V 1             
-     132 V 0             B 2             
-     133 C                       
-     134 F 1     ...     ...     ...     ...     ...     
-     135         U 1                 
-     136 ...     F 1     ...     ...     ...     ...     
-     137                 U 0             
-     138 ...     ...     F 1     ...     ...     ...     
-     139                                 V 0     
-     140                                 B 1     V 0 
-     141                         V 1             B 2 
-     142                         C           
-     143 ...     ...     ...     F 0     ...     ...     
-     144                                 U 1     
-     145 ...     ...     ...     ...     F 0     ...     
-     146                                         U 0 
-     147 ...     ...     ...     ...     ...     F 0 
-     148 =================
-     149 All tours started
-     150 1%>linux028:~/cs343/A5> ./votemake vote TYPE=TASK
-     151 rm -f ImplType
-     152 touch q1tallyVotes.h
-     153 make vote TYPE="TASK"
-     154 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-     155 echo "IMPLTYPE=TASK" > ImplType
-     156 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-     157 make[1]: Entering directory `/u9/pcockwell/cs343/A5'
-     158 u++                                      -g -Wall -Wno-unused-label -MMD -DIMPLTYPE_TASK   -c -o q1.o q1.cc
-     159 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-     160 u++                                      q1.o -o vote
-     161 uC++ Version 6.0.0 (single processor) (debug) (no yield) (no verify) (no profile)
-     162 make[1]: Leaving directory `/u9/pcockwell/cs343/A5'
-     163 1%>linux028:~/cs343/A5> make vote TYPE=TASK./vote
-     164 Voter0  Voter1  Voter2  Voter3  Voter4  Voter5  
-     165 ======= ======= ======= ======= ======= ======= 
-     166 S       S       S       S       S       S   
-     167                                         V 1 
-     168 V 0                                     B 1 
-     169 B 2                     V 1         
-     170                         B 3             C   
-     171                                         U 2 
-     172 ...     ...     ...     ...     ...     F 1 
-     173 U 1                     
-     174 F 1     ...     ...     ...     ...     ...     
-     175                         U 0         
-     176 ...     ...     ...     F 1     ...     ...     
-     177                 V 1             
-     178                 B 1             V 1     
-     179         V 1                     B 2     
-     180         B 3     C               
-     181                 U 2             
-     182 ...     ...     F 1     ...     ...     ...     
-     183                                 U 1     
-     184 ...     ...     ...     ...     F 1     ...     
-     185         U 0                 
-     186 ...     F 1     ...     ...     ...     ...     
-     187 =================
-     188 All tours started
-     189 1%>linux028:~/cs343/A5> quit
-     190 quit: Command not found.
-     191 1%>linux028:~/cs343/A5> 
-     192 Use "exit" to leave tcsh.
-     193 1%>linux028:~/cs343/A5> exit
-     194 exit
-     195 
-     196 Script done on Mon 19 Nov 2012 09:35:06 PM EST
+  1 Script started on Mon 03 Dec 2012 07:55:12 PM EST
+  2 1%>linux028:~/cs343/a6> ./soda
+  3 Parent  WATOff  Names   Truck   Plant   Stud0   Stud1   Stud2   Stud3   Mach0   Mach1   Mach2   Cour0   Cour1   
+  4 ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* 
+  5 S       S       S                                                       S1                      S       S       
+  6                 R0                                                              S1                              
+  7                 R1                                                                      S1                      
+  8                 R2              S                                                                               
+  9         C0,5    N0,0    S       G6      S1,7                                                                    
+ 10         W                               V0      S0,2    S0,4    S1,8                            t0,5            
+ 11         C1,5    N1,1                            V1                                                              
+ 12         W                                                                                               t1,5    
+ 13         C2,5    N2,2                                    V2                                                      
+ 14         C3,5    N3,0    P6                                      V0                                              
+ 15                         d0,6                                            r                                       
+ 16                         U0,15                                                                                   
+ 17                         D0,1    P                                       R                                       
+ 18                         d1,1                                                    r                               
+ 19                         U1,19                                                                                   
+ 20 D0,1                    D1,0    G8                                              R                               
+ 21                         P8                                                                                      
+ 22                         d0,8                                            r                                       
+ 23                         U0,12                                                                                   
+ 24                         D0,5    P                                       R                                       
+ 25                         d1,5                                                    r                               
+ 26                         U1,15                                                                                   
+ 27                         D1,1                                                    R                               
+ 28                         d2,1                                                            r                       
+ 29                         U2,19                                                                                   
+ 30                         D2,0    G10                                                     R                       
+ 31                         P10                                                                                     
+ 32                         d0,10                                           r                                       
+ 33                         U0,6                                                                                    
+ 34                         D0,4    P                                       R                                       
+ 35                         d1,4                                                    r                               
+
+175 D1,1    W               D2,227  G13                                             B0,4    R               T1,5    
+176                         P13                     B4                                                      t2,5    
+177                         d0,240                                          r                                       
+178                         D0,240  P                                       R                                       
+179                         d1,240                                                  r                               
+180                         D1,239                                                  R                               
+181                         d2,239                                                          r                       
+182                         D2,239  G13             B3                              B0,4                            
+183 ...     ...     ...     ...     ...     ...     F       ...     ...     ...     ...     ...     ...     ...     
+184                         P13                                                             R                       
+185                         d0,252                                          r                                       
+186 D3,1                    D0,252  P                                       R                                       
+187                         d1,252                                                  r                               
+
+232                         d2,306                                                          r                       
+233                         D2,304  G13                                                     R                       
+234                                                         B1                              B0,4                    
+235 ...     ...     ...     ...     ...     ...     ...     F       ...     ...     ...     ...     ...     ...     
+236                         P13                                     B1      B1,3                                    
+237                         d0,317                                          r                                       
+238                         D0,315  P                                       R                                       
+
+255                         D1,326                                                  R                               
+256                         d2,326                                                          r                       
+257 D1,2                    D2,326  G15                             B3      B1,4            R                       
+258 ...     ...     ...     ...     ...     ...     ...     ...     F       ...     ...     ...     ...     ...     
+259                         P15                                                                                     
+260                         d0,341                                          r                                       
+261                        D0,340  P                                       R                                       
+
+547                         d0,806                                          r                                       
+548 D0,1                    D0,806  P                                       R                               T0,6    
+549                         d1,806                                                  r                               
+550 D0,2    C0,5            D1,806  G8      L                                       R                               
+551                         d2,806                                                          r                       
+552         W               D2,806                                                          R       t0,5            
+553                         P8                                                                                      
+
+752                         d1,1137                                                 r                               
+753                         D1,1137         B4                              B1,4    R                               
+754                         d2,1137                                                         r                       
+755                         D2,1137 G14     B3                              B1,3            R                       
+756 ...     ...     ...     ...     ...     F       ...     ...     ...     ...     ...     ...     ...     ...     
+757 ...     ...     ...     F       ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     
+758 ...     ...     ...     ...     F       ...     ...     ...     ...     ...     ...     ...     ...     ...     
+759 ...     ...     ...     ...     ...     ...     ...     ...     ...     F       ...     ...     ...     ...     
+760 ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     F       ...     ...     ...     
+761 ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     F       ...     ...     
+762 D1,1                                                                                                            
+763 ...     ...     F       ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     
+764 ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     F       ...     
+765 ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     F       
+766 ...     F       ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     
+767 D1,2                                                                                                            
+768 F       ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     ...     
+769 ***********************
+770 1%>linux028:~/cs343/a6> exit
+771 exit
+772 
+773 Script done on Mon 03 Dec 2012 07:55:20 PM EST
 
     ANALYSIS
     The results from running the program with no command line parameters show that:
     1)  The default parameters are respected
     2)  The system runs smoothly and appropriately terminates once complete
+    3)  Functionality such as lost watcards works
+    4)  All elements of the program operate as expected
 
     From this we can say that the basic functionality works as expected
